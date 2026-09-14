@@ -140,7 +140,7 @@ const setLanguage = (language) => {
   document.documentElement.lang = language;
   localStorage.setItem("deutschtec-language", language);
   selectedLanguageFlag.src =
-    language === "de" ? "/flag-de.svg" : "/flag-gb.svg";
+    language === "de" ? "./public/flag-de.svg" : "./public/flag-gb.svg";
   selectedLanguageFlag.alt = language === "de" ? "Deutsch" : "English";
   languageOptions.forEach((option) => {
     option.setAttribute(
