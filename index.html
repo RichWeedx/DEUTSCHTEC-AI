@@ -1,0 +1,4346 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Deutschtec asks several leading AI models at once and shows you where they agree."
+    />
+    <title>Deutschtec AI | One question. Several AIs.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --ink: #081b2d;
+        --navy: #1a2a56;
+        --navy-deep: #04101c;
+        --mist: #ebf2ff;
+        --sand: #faf8f3;
+        --surface: #ffffff;
+        --line: #d8dff3;
+        --muted: #60779d;
+        --aqua: #00f5d4;
+        --aqua-soft: #4dfcde;
+        --aqua-deep: #00ad96;
+        --sky: #00bbf9;
+        --crimson: #881127;
+        --ochre: #e4b85c;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 320px;
+        background: var(--sand);
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        overflow-x: hidden;
+        color: var(--navy);
+        background: var(--sand);
+        font-family: "Manrope", sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+      }
+
+      button {
+        cursor: pointer;
+      }
+
+      .site-header {
+        position: relative;
+        z-index: 5;
+        height: 76px;
+        border-bottom: 1px solid rgba(26, 42, 86, 0.12);
+        background: rgba(245, 236, 225, 0.94);
+        backdrop-filter: blur(18px);
+      }
+
+      .header-inner {
+        width: min(1240px, calc(100% - 48px));
+        height: 100%;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        gap: 54px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+        color: var(--navy);
+        text-decoration: none;
+        font-size: 0;
+        line-height: 1;
+      }
+
+      .brand-logo {
+        display: block;
+        width: 137px;
+        height: auto;
+      }
+
+      .primary-nav {
+        display: flex;
+        align-items: center;
+        gap: 30px;
+        margin-right: auto;
+      }
+
+      .primary-nav a,
+      .mobile-menu summary {
+        color: var(--navy);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition:
+          color 160ms ease,
+          background-color 160ms ease;
+      }
+
+      .primary-nav a:hover,
+      .mobile-menu summary:hover {
+        color: #3a5596;
+        background: transparent;
+      }
+
+      .primary-nav a {
+        padding: 6px 9px;
+        border-radius: 6px;
+      }
+
+      .nav-with-arrow::after {
+        display: inline-block;
+        width: 6px;
+        height: 6px;
+        margin: 0 0 3px 7px;
+        border-right: 1px solid currentColor;
+        border-bottom: 1px solid currentColor;
+        content: "";
+        transform: rotate(45deg);
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+      }
+
+      .language-button {
+        display: inline-flex;
+        width: auto;
+        height: 32px;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--navy);
+        transition:
+          color 160ms ease,
+          background-color 160ms ease;
+      }
+
+      .language-button:hover {
+        background: transparent;
+        color: #3a5596;
+      }
+
+      .language-button svg {
+        width: 21px;
+        height: 21px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+      }
+
+      .selected-language-flag {
+        display: block;
+        width: 20px;
+        height: 14px;
+        border: 1px solid rgba(8, 27, 45, 0.16);
+        border-radius: 2px;
+        object-fit: cover;
+      }
+
+      .language-picker {
+        position: relative;
+      }
+
+      .language-menu {
+        position: absolute;
+        top: calc(100% + 10px);
+        right: 0;
+        z-index: 30;
+        display: grid;
+        min-width: 150px;
+        gap: 4px;
+        padding: 7px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface);
+        box-shadow: 0 14px 30px rgba(8, 27, 45, 0.16);
+      }
+
+      .language-menu[hidden] {
+        display: none;
+      }
+
+      .language-option {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        padding: 9px 10px;
+        border: 0;
+        border-radius: 7px;
+        background: transparent;
+        color: var(--navy);
+        font-size: 13px;
+        text-align: left;
+      }
+
+      .language-option:hover,
+      .language-option[aria-checked="true"] {
+        background: var(--mist);
+      }
+
+      .language-option[aria-checked="true"]::after {
+        color: #3a5596;
+        content: "✓";
+        font-weight: 800;
+      }
+
+      .language-flag {
+        display: inline-block;
+        width: 20px;
+        height: 14px;
+        flex: 0 0 auto;
+        border: 1px solid rgba(8, 27, 45, 0.16);
+        border-radius: 2px;
+        object-fit: cover;
+      }
+
+      .login-link {
+        color: var(--navy);
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .header-button,
+      .composer-submit {
+        border: 1px solid var(--navy);
+        border-radius: 5px;
+        background: var(--navy);
+        color: var(--mist);
+        font-weight: 800;
+        transition:
+          background 160ms ease,
+          box-shadow 160ms ease,
+          transform 160ms ease;
+      }
+
+      .header-button {
+        padding: 11px 18px;
+        font-size: 12px;
+        text-decoration: none;
+      }
+
+      .header-button:hover,
+      .composer-submit:hover {
+        background: var(--ink);
+        box-shadow: 0 10px 22px rgba(26, 42, 86, 0.22);
+        transform: translateY(-1px);
+        text-decoration: none;
+      }
+
+      .hero {
+        position: relative;
+        min-height: calc(100vh - 76px);
+        display: flex;
+        justify-content: center;
+        overflow: hidden;
+        isolation: isolate;
+        background: var(--sand);
+      }
+
+      .hero::before,
+      .hero::after {
+        position: absolute;
+        z-index: -1;
+        content: "";
+        pointer-events: none;
+        display: none;
+      }
+
+      .hero::before {
+        top: 9%;
+        left: -8%;
+        width: 116%;
+        height: 82%;
+        background:
+          radial-gradient(
+            ellipse at 50% 34%,
+            rgba(235, 242, 255, 0.98) 0 13%,
+            rgba(142, 166, 216, 0.94) 22%,
+            rgba(0, 187, 249, 0.9) 39%,
+            transparent 63%
+          ),
+          radial-gradient(
+            ellipse at 12% 78%,
+            rgba(0, 245, 212, 0.98) 0 10%,
+            rgba(0, 173, 150, 0.72) 20%,
+            transparent 42%
+          ),
+          radial-gradient(
+            ellipse at 89% 79%,
+            rgba(228, 184, 92, 0.92) 0 6%,
+            rgba(136, 17, 39, 0.75) 20%,
+            transparent 43%
+          );
+        filter: blur(42px);
+        opacity: 0.93;
+        transform: rotate(-2deg) scale(1.12);
+      }
+
+      .hero::after {
+        inset: 0;
+        background:
+          linear-gradient(
+            180deg,
+            rgba(8, 27, 45, 0.12) 0%,
+            rgba(8, 27, 45, 0.03) 25%,
+            rgba(8, 27, 45, 0.68) 91%
+          ),
+          radial-gradient(
+            circle at 50% 48%,
+            transparent 0 28%,
+            rgba(4, 16, 28, 0.25) 85%
+          );
+      }
+
+      .hero-content {
+        width: min(820px, calc(100% - 40px));
+        padding: clamp(112px, 16vh, 165px) 0 94px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--navy);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        max-width: 780px;
+        margin: 0;
+        color: var(--navy);
+        font-size: clamp(44px, 6.8vw, 86px);
+        font-weight: 800;
+        letter-spacing: -0.055em;
+        line-height: 0.98;
+        text-shadow: none;
+      }
+
+      h1 span {
+        color: var(--navy);
+      }
+
+      .hero-copy {
+        max-width: 560px;
+        margin: 21px auto 0;
+        color: var(--muted);
+        font-size: clamp(16px, 2vw, 19px);
+        line-height: 1.55;
+      }
+
+      .composer {
+        width: min(680px, 100%);
+        margin: 42px auto 0;
+        padding: 9px 11px 10px 20px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: var(--surface);
+        box-shadow: 0 18px 38px rgba(26, 42, 86, 0.14);
+        text-align: left;
+      }
+
+      .composer-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .composer input {
+        min-width: 0;
+        flex: 1;
+        border: 0;
+        outline: 0;
+        background: transparent;
+        color: var(--ink);
+        font-size: 15px;
+      }
+
+      .composer input::placeholder {
+        color: rgba(8, 27, 45, 0.58);
+      }
+
+      .composer-submit {
+        flex: 0 0 auto;
+        padding: 10px 19px;
+        font-size: 12px;
+      }
+
+      .composer-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 10px;
+      }
+
+      .composer-hint,
+      .composer-status {
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 10px;
+        letter-spacing: 0.02em;
+      }
+
+      .composer-status {
+        color: var(--sky-700, #047195);
+        font-weight: 500;
+      }
+
+      .trust-line {
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.04em;
+        opacity: 0.9;
+      }
+
+      .trust-line strong {
+        color: var(--navy);
+        font-weight: 500;
+      }
+
+      .trust-strip {
+        padding: 30px 24px 48px;
+        background: var(--mist);
+      }
+
+      .trust-grid {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+      }
+
+      .trust-card {
+        min-height: 190px;
+        padding: 21px 22px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--surface);
+      }
+
+      .trust-icon {
+        width: 28px;
+        height: 28px;
+        margin-bottom: 15px;
+        border: 2px solid var(--navy);
+        border-radius: 50%;
+        color: var(--navy);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        line-height: 24px;
+        text-align: center;
+      }
+
+      .trust-card h2 {
+        margin: 0 0 8px;
+        color: var(--navy);
+        font-size: 16px;
+        line-height: 1.2;
+      }
+
+      .trust-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.55;
+      }
+
+      .problem {
+        padding: 104px 24px 120px;
+        background: var(--navy-deep);
+        color: var(--mist);
+      }
+
+      .problem-inner {
+        width: min(820px, 100%);
+        margin: 0 auto;
+      }
+
+      .problem-label {
+        margin: 0 0 18px;
+        color: var(--sky);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+      }
+
+      .problem h2 {
+        margin: 0 0 20px;
+        color: var(--sand);
+        font-size: clamp(36px, 5vw, 58px);
+        letter-spacing: -0.05em;
+        line-height: 1.05;
+      }
+
+      .problem p {
+        max-width: 780px;
+        margin: 0;
+        color: var(--navy-200, #b7c6e8);
+        font-size: clamp(17px, 2vw, 21px);
+        line-height: 1.6;
+      }
+
+      .mobile-menu {
+        display: none;
+      }
+
+      @media (max-width: 840px) {
+        .header-inner {
+          width: min(100% - 32px, 640px);
+          gap: 20px;
+        }
+
+        .primary-nav,
+        .login-link {
+          display: none;
+        }
+
+        .header-actions {
+          margin-left: auto;
+        }
+
+        .mobile-menu {
+          display: block;
+          order: -1;
+        }
+
+        .mobile-menu summary {
+          list-style: none;
+          cursor: pointer;
+          width: 32px;
+          height: 32px;
+          overflow: hidden;
+          position: relative;
+          color: transparent;
+        }
+
+        .mobile-menu summary::before,
+        .mobile-menu summary::after {
+          position: absolute;
+          left: 5px;
+          width: 22px;
+          height: 2px;
+          border-radius: 2px;
+          background: var(--ink);
+          content: "";
+        }
+
+        .mobile-menu summary::before {
+          top: 10px;
+          box-shadow:
+            0 6px 0 var(--ink),
+            0 12px 0 var(--ink);
+        }
+
+        .mobile-menu summary::after {
+          display: none;
+        }
+
+        .mobile-menu summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .mobile-menu nav {
+          position: absolute;
+          top: 67px;
+          left: 16px;
+          display: grid;
+          gap: 15px;
+          min-width: 180px;
+          padding: 18px;
+          border: 1px solid var(--line);
+          border-radius: 6px;
+          background: var(--surface);
+          box-shadow: 0 18px 40px rgba(4, 16, 28, 0.35);
+        }
+
+        .mobile-menu nav a {
+          color: var(--navy);
+          text-decoration: none;
+          font-size: 13px;
+        }
+
+        .mobile-menu nav a + a {
+          padding-top: 12px;
+          border-top: 1px solid rgba(26, 42, 86, 0.22);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .site-header {
+          height: 68px;
+        }
+
+        .header-inner {
+          width: calc(100% - 28px);
+        }
+
+        .brand-logo {
+          width: 119px;
+        }
+
+        .header-button {
+          padding: 9px 12px;
+          font-size: 11px;
+        }
+
+        .hero {
+          min-height: calc(100vh - 68px);
+        }
+
+        .hero-content {
+          width: min(100% - 28px, 480px);
+          padding-top: 94px;
+        }
+
+        h1 {
+          font-size: clamp(41px, 12vw, 61px);
+          letter-spacing: -0.06em;
+        }
+
+        .hero-copy {
+          font-size: 15px;
+        }
+
+        .composer {
+          margin-top: 30px;
+          padding: 14px;
+        }
+
+        .composer-row {
+          align-items: stretch;
+          flex-direction: column;
+        }
+
+        .composer input {
+          min-height: 38px;
+        }
+
+        .composer-submit {
+          width: 100%;
+        }
+
+        .composer-footer {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .trust-line {
+          font-size: 10px;
+          line-height: 1.6;
+        }
+
+        .trust-strip {
+          padding: 24px 14px 34px;
+        }
+
+        .trust-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .trust-card {
+          min-height: auto;
+        }
+
+        .problem {
+          padding: 72px 20px 82px;
+        }
+      }
+
+      @media (min-width: 561px) and (max-width: 900px) {
+        .trust-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          transition: none !important;
+        }
+      }
+
+      /* Final phone pass: keep the first viewport useful without altering desktop. */
+      @media (max-width: 560px) {
+        .mobile-menu summary {
+          width: 30px;
+          height: 30px;
+          padding: 0;
+          font-size: 0;
+          color: transparent;
+        }
+
+        .header-inner {
+          gap: 10px;
+        }
+
+        .brand-logo {
+          width: 108px;
+        }
+
+        .header-button {
+          padding: 8px 10px;
+          border-radius: 6px;
+          font-size: 11px;
+          white-space: nowrap;
+        }
+
+        .hero-content {
+          padding-top: 48px;
+        }
+
+        h1 {
+          max-width: 360px;
+          margin-inline: auto;
+          font-size: clamp(36px, 10.5vw, 48px);
+          line-height: 1;
+        }
+
+        .hero-copy {
+          margin-top: 14px;
+          font-size: 14px;
+          line-height: 1.45;
+        }
+
+        .composer {
+          margin-top: 22px;
+          padding: 10px 12px;
+          border-radius: 16px;
+        }
+
+        .composer-row {
+          align-items: center;
+          flex-direction: row;
+          gap: 7px;
+          min-height: 34px;
+        }
+
+        .composer-tool {
+          width: 18px;
+          font-size: 19px;
+        }
+
+        .composer input {
+          min-width: 0;
+          min-height: 32px;
+          font-size: 12px;
+        }
+
+        .composer-mode {
+          padding: 5px 2px;
+          font-size: 11px;
+        }
+
+        .composer-submit {
+          width: auto;
+          padding: 8px 11px;
+          border-radius: 11px;
+          font-size: 11px;
+        }
+
+        .composer-footer {
+          align-items: center;
+          flex-direction: row;
+          gap: 8px;
+          margin-top: 7px;
+          white-space: nowrap;
+        }
+
+        .composer-hint,
+        .composer-status {
+          font-size: 9px;
+        }
+
+        .composer-hint {
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .hero-content > .model-marquee {
+          margin-top: 22px;
+        }
+
+        .model-marquee {
+          height: 52px;
+        }
+
+        .model-item img {
+          width: 21px;
+          height: 21px;
+        }
+
+        .model-item {
+          font-size: 8px;
+        }
+
+        .answer-card.best {
+          grid-column: auto;
+        }
+
+        .answer-card {
+          min-height: 220px;
+        }
+      }
+
+      /* Lovable-inspired landing composition using Deutschtec colors. */
+      .model-marquee {
+        position: relative;
+        z-index: 6;
+        height: 64px;
+        overflow: hidden;
+        border-bottom: 0;
+        background: transparent;
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 8%,
+          #000 92%,
+          transparent
+        );
+      }
+
+      .hero-content > .model-marquee {
+        width: calc(100% + 40px);
+        margin: 42px -20px 0;
+      }
+
+      .model-marquee::before {
+        position: absolute;
+        inset: 0;
+        background: transparent;
+        content: "";
+        pointer-events: none;
+      }
+
+      .model-marquee::after {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        height: 2px;
+        background: radial-gradient(
+          ellipse at center,
+          rgba(26, 42, 86, 0.62) 0%,
+          rgba(26, 42, 86, 0.3) 26%,
+          rgba(26, 42, 86, 0.08) 54%,
+          transparent 76%
+        );
+        box-shadow: 0 2px 10px rgba(26, 42, 86, 0.22);
+        content: "";
+        pointer-events: none;
+      }
+
+      .model-marquee-track {
+        position: relative;
+        z-index: 1;
+        width: max-content;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        animation: modelOrbit 34s linear infinite;
+        will-change: transform;
+      }
+
+      .model-set {
+        display: grid;
+        width: 864px;
+        grid-template-columns: repeat(9, 96px);
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        padding: 0;
+      }
+
+      .model-item {
+        display: grid;
+        width: 96px;
+        min-width: 96px;
+        justify-items: center;
+        gap: 3px;
+        color: var(--muted);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        opacity: 0.34;
+        animation: modelFade 8s ease-in-out infinite;
+      }
+
+      .model-item:nth-child(2) {
+        animation-delay: -1s;
+      }
+      .model-item:nth-child(3) {
+        animation-delay: -2s;
+      }
+      .model-item:nth-child(4) {
+        animation-delay: -3s;
+      }
+      .model-item:nth-child(5) {
+        animation-delay: -4s;
+      }
+      .model-item:nth-child(6) {
+        animation-delay: -5s;
+      }
+      .model-item:nth-child(7) {
+        animation-delay: -6s;
+      }
+      .model-item:nth-child(8) {
+        animation-delay: -7s;
+      }
+      .model-item:nth-child(9) {
+        animation-delay: -8s;
+      }
+
+      .model-item img {
+        display: block;
+        width: 28px;
+        height: 28px;
+        object-fit: contain;
+        filter: brightness(0) saturate(100%) invert(12%) sepia(18%)
+          saturate(1835%) hue-rotate(170deg) brightness(92%) contrast(96%);
+      }
+
+      @keyframes modelOrbit {
+        from {
+          transform: translateX(-50%);
+        }
+        to {
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes modelFade {
+        0%,
+        100% {
+          opacity: 0.25;
+        }
+        50% {
+          opacity: 0.88;
+        }
+      }
+
+      .site-header {
+        height: 66px;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        border-bottom-color: rgba(8, 27, 45, 0.09);
+        background: rgba(250, 248, 243, 0.94);
+      }
+
+      .header-inner {
+        width: min(1440px, calc(100% - 80px));
+        gap: 58px;
+      }
+
+      .brand-logo {
+        width: 136px;
+      }
+
+      .primary-nav {
+        gap: 30px;
+      }
+
+      .primary-nav a,
+      .mobile-menu summary,
+      .login-link {
+        color: var(--ink);
+        font-size: 14px;
+        font-weight: 500;
+      }
+
+      .primary-nav a:hover,
+      .mobile-menu summary:hover {
+        color: #3a5596;
+        background: transparent;
+      }
+
+      .header-actions {
+        margin-left: auto;
+      }
+
+      .login-link {
+        display: none;
+      }
+
+      .header-button {
+        padding: 10px 16px;
+        border-radius: 7px;
+        background: var(--ink);
+        color: var(--mist);
+        font-size: 13px;
+        text-decoration: none;
+      }
+
+      .header-button:hover,
+      .header-button:focus-visible {
+        color: var(--mist);
+        text-decoration: none;
+        box-shadow: none;
+        transform: scale(1.04);
+      }
+
+      .hero {
+        min-height: calc(100vh - 66px);
+        background: var(--mist);
+      }
+
+      .hero::before,
+      .hero::after {
+        display: block;
+      }
+
+      .hero::before {
+        inset: 10% -9% -12%;
+        width: auto;
+        height: auto;
+        background:
+          radial-gradient(
+            ellipse at 50% 3%,
+            rgba(250, 248, 243, 1) 0 24%,
+            rgba(235, 242, 255, 0.94) 45%,
+            transparent 66%
+          ),
+          radial-gradient(
+            ellipse at 50% 62%,
+            rgba(250, 248, 243, 0.98) 0 13%,
+            rgba(216, 223, 243, 0.9) 30%,
+            rgba(26, 42, 86, 0.86) 58%,
+            rgba(8, 27, 45, 0.68) 82%,
+            transparent 96%
+          ),
+          radial-gradient(
+            ellipse at 4% 92%,
+            rgba(250, 248, 243, 0.98) 0 12%,
+            rgba(26, 42, 86, 0.9) 40%,
+            rgba(8, 27, 45, 0.76) 72%,
+            transparent 100%
+          ),
+          radial-gradient(
+            ellipse at 96% 92%,
+            rgba(250, 248, 243, 0.98) 0 12%,
+            rgba(26, 42, 86, 0.9) 40%,
+            rgba(8, 27, 45, 0.76) 72%,
+            transparent 100%
+          );
+        filter: blur(32px);
+        opacity: 0.98;
+        transform: none;
+      }
+
+      .hero::after {
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(250, 248, 243, 0.72) 0 20%,
+          rgba(235, 242, 255, 0.02) 48%,
+          rgba(8, 27, 45, 0.1) 100%
+        );
+      }
+
+      .hero-content {
+        width: min(900px, calc(100% - 40px));
+        padding: clamp(168px, 27vh, 285px) 0 120px;
+      }
+
+      .eyebrow {
+        display: none;
+      }
+
+      h1 {
+        max-width: 900px;
+        color: var(--ink);
+        font-size: clamp(48px, 5.2vw, 72px);
+        letter-spacing: -0.065em;
+        line-height: 0.98;
+      }
+
+      h1 span {
+        color: var(--ink);
+      }
+
+      .hero-copy {
+        max-width: 610px;
+        margin-top: 18px;
+        color: rgba(8, 27, 45, 0.68);
+        font-size: 17px;
+      }
+
+      .composer {
+        width: min(640px, 100%);
+        margin-top: 39px;
+        padding: 14px 15px 13px 21px;
+        border: 1px solid rgba(8, 27, 45, 0.1);
+        border-radius: 26px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 15px 38px rgba(8, 27, 45, 0.18);
+      }
+
+      .composer-row {
+        min-height: 39px;
+      }
+
+      .composer-tool,
+      .composer-mode {
+        flex: 0 0 auto;
+        border: 0;
+        background: transparent;
+        color: rgba(8, 27, 45, 0.72);
+        font-size: 13px;
+      }
+
+      .composer-tool {
+        width: 20px;
+        padding: 0;
+        font-size: 22px;
+        font-weight: 300;
+        line-height: 1;
+      }
+
+      .composer-mode {
+        padding: 6px 4px;
+        font-weight: 600;
+      }
+
+      .mode-picker {
+        position: relative;
+        flex: 0 0 auto;
+      }
+
+      .mode-menu {
+        position: absolute;
+        right: 0;
+        bottom: calc(100% + 8px);
+        z-index: 20;
+        display: grid;
+        min-width: 125px;
+        gap: 3px;
+        padding: 6px;
+        border: 1px solid var(--line);
+        border-radius: 9px;
+        background: var(--surface);
+        box-shadow: 0 12px 26px rgba(8, 27, 45, 0.16);
+      }
+
+      .mode-menu[hidden] {
+        display: none;
+      }
+
+      .mode-option {
+        padding: 8px 10px;
+        border: 0;
+        border-radius: 6px;
+        background: transparent;
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 700;
+        text-align: left;
+      }
+
+      .mode-option:hover,
+      .mode-option[aria-checked="true"] {
+        background: var(--mist);
+      }
+
+      .composer input {
+        font-size: 15px;
+      }
+
+      .composer-submit {
+        padding: 8px 14px;
+        border-radius: 15px;
+        background: var(--navy);
+        color: var(--mist);
+        font-size: 12px;
+      }
+
+      .composer-footer {
+        margin-top: 10px;
+        padding-left: 1px;
+      }
+
+      .composer-hint,
+      .composer-status {
+        font-family: "Manrope", sans-serif;
+        font-size: 11px;
+      }
+
+      .trust-line {
+        margin-top: 22px;
+        color: rgba(8, 27, 45, 0.7);
+        font-family: "Manrope", sans-serif;
+        font-size: 13px;
+      }
+
+      .trust-line strong {
+        color: var(--ink);
+      }
+
+      .trust-strip,
+      .problem {
+        display: none;
+      }
+
+      @media (max-width: 840px) {
+        .header-inner {
+          width: calc(100% - 32px);
+        }
+      }
+
+      @media (max-width: 560px) {
+        .model-marquee {
+          height: 56px;
+        }
+
+        .hero-content > .model-marquee {
+          width: calc(100% + 28px);
+          margin-right: -14px;
+          margin-left: -14px;
+          margin-top: 32px;
+        }
+
+        .model-set {
+          width: 720px;
+          grid-template-columns: repeat(9, 80px);
+          padding: 0;
+        }
+
+        .model-item {
+          width: 80px;
+          min-width: 80px;
+          font-size: 9px;
+        }
+
+        .model-item img {
+          width: 24px;
+          height: 24px;
+        }
+
+        .site-header {
+          height: 64px;
+        }
+
+        .header-inner {
+          width: calc(100% - 28px);
+          gap: 14px;
+        }
+
+        .header-actions {
+          gap: 9px;
+        }
+
+        .selected-language-flag {
+          width: 18px;
+          height: 13px;
+        }
+
+        .brand-logo {
+          width: 119px;
+        }
+
+        .hero {
+          min-height: calc(100vh - 64px);
+        }
+
+        .hero-content {
+          width: calc(100% - 28px);
+          padding-top: clamp(190px, 34vh, 286px);
+        }
+
+        h1 {
+          font-size: clamp(43px, 12vw, 60px);
+        }
+
+        .hero-copy {
+          font-size: 15px;
+        }
+
+        .composer {
+          border-radius: 20px;
+        }
+      }
+
+      /* Secondary landing sections: spacious, editorial and comparison-first. */
+      .capabilities,
+      .workflow {
+        display: block;
+        background: var(--sand);
+        color: var(--navy);
+      }
+
+      .capabilities {
+        padding: 112px max(28px, 7vw) 120px;
+      }
+
+      .section-intro {
+        width: min(640px, 100%);
+        margin-bottom: 52px;
+      }
+
+      .section-kicker {
+        margin: 0 0 16px;
+        color: #3a5596;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .section-title {
+        margin: 0;
+        color: var(--ink);
+        font-size: clamp(38px, 5vw, 62px);
+        letter-spacing: -0.06em;
+        line-height: 1.02;
+      }
+
+      .section-description {
+        max-width: 560px;
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.55;
+      }
+
+      .capability-grid {
+        width: min(1280px, 100%);
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      .capability-card {
+        min-height: 430px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border: 1px solid rgba(26, 42, 86, 0.12);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.8);
+        box-shadow: 0 12px 32px rgba(26, 42, 86, 0.07);
+      }
+
+      .capability-visual {
+        position: relative;
+        min-height: 245px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--mist);
+      }
+
+      .capability-visual::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          transparent 52%,
+          rgba(255, 255, 255, 0.68)
+        );
+        content: "";
+      }
+
+      .visual-prompt {
+        width: 68%;
+        min-height: 112px;
+        padding: 22px;
+        border: 1px solid rgba(26, 42, 86, 0.2);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.88);
+        box-shadow: 0 16px 35px rgba(26, 42, 86, 0.18);
+        color: var(--muted);
+        font-size: 15px;
+      }
+
+      .visual-prompt::before {
+        display: block;
+        width: 7px;
+        height: 7px;
+        margin-bottom: 10px;
+        border-radius: 50%;
+        background: var(--navy);
+        content: "";
+      }
+
+      .visual-compare {
+        width: 70%;
+        padding: 20px;
+        border: 1px solid rgba(26, 42, 86, 0.16);
+        border-radius: 9px;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 15px 32px rgba(26, 42, 86, 0.12);
+      }
+
+      .visual-compare span {
+        display: block;
+        height: 9px;
+        margin: 11px 0;
+        border-radius: 9px;
+        background: var(--line);
+      }
+
+      .visual-compare span:first-child {
+        width: 72%;
+        background: #8ea6d8;
+      }
+
+      .visual-compare span:last-child {
+        width: 48%;
+        background: var(--navy);
+      }
+
+      .visual-security {
+        width: 62%;
+        padding: 24px;
+        border-left: 4px solid var(--navy);
+        background: rgba(255, 255, 255, 0.84);
+        box-shadow: 0 14px 28px rgba(26, 42, 86, 0.11);
+        color: var(--navy);
+      }
+
+      .germany-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .germany-flag {
+        display: inline-flex;
+        width: 24px;
+        height: 16px;
+        overflow: hidden;
+        flex-direction: column;
+        border: 1px solid rgba(8, 27, 45, 0.14);
+        border-radius: 2px;
+        vertical-align: -3px;
+      }
+
+      .germany-flag span {
+        display: block;
+        width: 100%;
+        height: 33.333%;
+        margin: 0;
+      }
+
+      .germany-flag span:nth-child(1) {
+        background: #111111;
+      }
+      .germany-flag span:nth-child(2) {
+        background: #d21f2b;
+      }
+      .germany-flag span:nth-child(3) {
+        background: #e4b85c;
+      }
+
+      .visual-security span {
+        display: block;
+        margin: 10px 0;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .visual-security .germany-flag {
+        display: inline-flex;
+        width: 24px;
+        height: 16px;
+        margin: 0;
+        flex: 0 0 auto;
+        flex-direction: column;
+      }
+
+      .visual-security .germany-flag span {
+        display: block;
+        width: 100%;
+        height: 33.333%;
+        margin: 0;
+        color: transparent;
+        font-size: 0;
+      }
+
+      .capability-card:nth-child(1) .capability-visual {
+        background: radial-gradient(
+          circle at 48% 45%,
+          #ffffff 0 20%,
+          #d8dff3 56%,
+          #8ea6d8 100%
+        );
+      }
+
+      .capability-card:nth-child(2) .capability-visual {
+        background: radial-gradient(
+          circle at 52% 45%,
+          #ffffff 0 16%,
+          #faf8f3 48%,
+          #b7c6e8 100%
+        );
+      }
+
+      .capability-card:nth-child(3) .capability-visual {
+        background: radial-gradient(
+          circle at 48% 42%,
+          #ffffff 0 22%,
+          #ebf2ff 50%,
+          #8ea6d8 100%
+        );
+      }
+
+      .capability-copy {
+        position: relative;
+        z-index: 1;
+        padding: 24px 26px 28px;
+        background: rgba(255, 255, 255, 0.9);
+      }
+
+      .capability-copy h3 {
+        margin: 0 0 10px;
+        color: var(--ink);
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .capability-copy h3.with-icon {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .capability-icon {
+        display: inline-flex;
+        flex: 0 0 auto;
+        width: 25px;
+        height: 25px;
+        color: #3a5596;
+      }
+
+      .capability-icon svg {
+        width: 100%;
+        height: 100%;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+      }
+
+      .capability-visual .capability-icon {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        margin: 0 0 12px;
+        color: var(--navy);
+      }
+
+      .capability-visual .germany-flag {
+        display: inline-flex;
+        width: 42px;
+        height: 28px;
+        margin: 0 0 12px;
+        flex-direction: column;
+      }
+
+      .capability-visual .germany-flag span {
+        display: block;
+        width: 100%;
+        height: 33.333%;
+        margin: 0;
+      }
+
+      .capability-visual .trust-visual {
+        display: flex;
+        width: 72%;
+        min-height: 148px;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 18px;
+        border: 1px solid rgba(26, 42, 86, 0.14);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.76);
+        box-shadow: 0 12px 24px rgba(26, 42, 86, 0.1);
+        color: var(--navy);
+        text-align: center;
+      }
+
+      .capability-visual .trust-visual strong {
+        display: block;
+        margin: 0 0 7px;
+        font-size: 14px;
+        line-height: 1.25;
+      }
+
+      .capability-visual
+        .trust-visual
+        span:not(.capability-icon):not(.germany-flag) {
+        display: block;
+        margin: 0;
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.35;
+      }
+
+      .capability-copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.6;
+      }
+
+      .workflow {
+        padding: 112px max(28px, 7vw) 130px;
+      }
+
+      .workflow-inner {
+        width: min(1080px, 100%);
+        margin: 0 auto;
+      }
+
+      .workflow .section-title {
+        text-align: center;
+      }
+
+      .step-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+        margin-top: 42px;
+        border-top: 1px solid var(--line);
+      }
+
+      .step-card {
+        padding: 26px 0 0;
+        border-top: 2px solid #8ea6d8;
+        margin-top: -1px;
+      }
+
+      .step-number {
+        color: #3a5596;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 14px;
+      }
+
+      .step-card h3 {
+        margin: 8px 0 10px;
+        color: var(--ink);
+        font-size: 24px;
+        letter-spacing: -0.04em;
+      }
+
+      .step-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .consensus-preview {
+        width: min(780px, 100%);
+        margin: 76px auto 0;
+        padding: 20px 28px 27px;
+        border: 1px solid #5c79b8;
+        border-radius: 18px;
+        background: rgba(235, 242, 255, 0.62);
+        box-shadow: 0 16px 34px rgba(26, 42, 86, 0.1);
+      }
+
+      .consensus-label {
+        margin: 0 0 16px;
+        color: var(--navy);
+        font-weight: 700;
+      }
+
+      .consensus-dots {
+        display: flex;
+        gap: 10px;
+      }
+
+      .consensus-dots span {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: var(--navy);
+      }
+
+      .consensus-dots span:last-child {
+        background: #d8dff3;
+      }
+
+      .consensus-card {
+        width: min(780px, 100%);
+        margin: 20px auto 0;
+        padding: 28px;
+        border-top: 3px solid #5c79b8;
+        border-radius: 17px;
+        background: var(--surface);
+        box-shadow: 0 15px 34px rgba(26, 42, 86, 0.12);
+      }
+
+      .consensus-card h3 {
+        margin: 0 0 12px;
+        color: var(--ink);
+        font-size: 28px;
+      }
+
+      .consensus-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .consensus-card.expanded {
+        border-top: 0;
+        padding: 28px;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfcfe 100%);
+      }
+
+      .agreement-kicker {
+        margin: 0 0 9px;
+        color: #3a5596;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .consensus-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+      }
+
+      .consensus-heading h3 {
+        margin: 0;
+        font-size: 30px;
+        letter-spacing: -0.045em;
+      }
+
+      .confidence-pill,
+      .model-state {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 14px;
+        border-radius: 999px;
+        background: var(--mist);
+        color: #3a5596;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .consensus-meter {
+        margin: 22px 0 26px;
+        padding: 18px 20px 19px;
+        border-radius: 13px;
+        background: var(--mist);
+      }
+
+      .meter-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 14px;
+        color: var(--navy);
+        font-size: 14px;
+      }
+
+      .meter-label strong {
+        font-weight: 800;
+      }
+
+      .meter-track {
+        height: 7px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: #d8dff3;
+      }
+
+      .meter-track span {
+        display: block;
+        width: 80%;
+        height: 100%;
+        border-radius: inherit;
+        background: #5c79b8;
+      }
+
+      .model-breakdown {
+        display: grid;
+        gap: 10px;
+        margin-top: 25px;
+      }
+
+      .model-result {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        min-height: 58px;
+        padding: 12px 16px 12px 18px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.76);
+        color: var(--navy);
+        transition:
+          border-color 180ms ease,
+          transform 180ms ease,
+          box-shadow 180ms ease;
+      }
+
+      .model-result:hover {
+        border-color: #8ea6d8;
+        box-shadow: 0 6px 16px rgba(26, 42, 86, 0.08);
+        transform: translateX(3px);
+      }
+
+      .comparison-board {
+        margin-top: 26px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #f8fafc;
+      }
+
+      .question-label {
+        margin: 0 0 9px;
+        color: var(--muted);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 11px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .question-text {
+        margin: 0;
+        color: var(--navy);
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .answer-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        align-items: stretch;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .answer-card {
+        position: relative;
+        min-height: 235px;
+        display: flex;
+        flex-direction: column;
+        padding: 9px 8px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: rgba(255, 255, 255, 0.88);
+      }
+
+      .answer-card.best {
+        border-color: #5c79b8;
+        background: var(--mist);
+        box-shadow: 0 8px 22px rgba(26, 42, 86, 0.12);
+      }
+
+      .answer-card.best::before {
+        position: absolute;
+        top: -17px;
+        left: 10px;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--navy);
+        color: var(--mist);
+        content: "Best Answer";
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .answer-name {
+        margin-bottom: 7px;
+        color: var(--navy);
+        font-size: 11px;
+        font-weight: 800;
+        overflow-wrap: anywhere;
+      }
+
+      .answer-name::before {
+        display: inline-block;
+        width: 7px;
+        height: 7px;
+        margin-right: 7px;
+        border-radius: 50%;
+        background: #5c9be8;
+        content: "";
+        vertical-align: 1px;
+      }
+
+      .answer-card:nth-child(2) .answer-name::before {
+        background: #ef8c32;
+      }
+      .answer-card:nth-child(3) .answer-name::before {
+        background: #6c83d8;
+      }
+      .answer-card:nth-child(4) .answer-name::before {
+        background: #e6a34d;
+      }
+      .answer-card:nth-child(5) .answer-name::before {
+        background: #d96d8b;
+      }
+
+      .answer-copy {
+        margin: 0;
+        color: var(--muted);
+        font-size: 9px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
+      .answer-tag {
+        display: inline-flex;
+        align-self: flex-start;
+        margin-top: auto;
+        padding: 3px 6px;
+        border-radius: 999px;
+        background: var(--mist);
+        color: #3a5596;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .answer-card.differs .answer-tag {
+        background: #fbe9e5;
+        color: #b84a3d;
+      }
+
+      .comparison-callout {
+        margin: 28px 0 0;
+        padding: 12px 14px;
+        border: 1px solid #b7c6e8;
+        border-radius: 10px;
+        background: var(--mist);
+        color: var(--navy);
+        font-size: 12px;
+        font-weight: 800;
+        text-align: center;
+        overflow-wrap: anywhere;
+      }
+
+      .comparison-board .question-text {
+        color: var(--navy);
+      }
+
+      .comparison-board .answer-copy {
+        font-size: 9px;
+      }
+
+      .comparison-board .comparison-callout {
+        margin-top: 28px;
+      }
+
+      .consensus-card .comparison-callout {
+        color: var(--navy);
+      }
+
+      .agreement-layout {
+        display: grid;
+        grid-template-columns: minmax(250px, 0.78fr) minmax(0, 1.22fr);
+        align-items: start;
+        gap: 42px;
+        margin-top: 76px;
+      }
+
+      .agreement-sidecopy {
+        padding-top: 22px;
+        text-align: left;
+      }
+
+      .agreement-sidecopy .section-kicker {
+        margin-bottom: 16px;
+      }
+
+      .agreement-sidecopy h3 {
+        margin: 0;
+        color: var(--ink);
+        max-width: 470px;
+        font-size: clamp(32px, 3.8vw, 50px);
+        letter-spacing: -0.035em;
+        line-height: 1.08;
+        overflow-wrap: anywhere;
+      }
+
+      .agreement-sidecopy p {
+        max-width: 475px;
+        margin: 20px 0 0;
+        color: var(--muted);
+        font-size: 16px;
+        line-height: 1.68;
+      }
+
+      .agreement-sidecopy .side-note {
+        margin-top: 38px;
+        padding-top: 22px;
+        border-top: 1px solid var(--line);
+        color: #3a5596;
+        font-size: 14px;
+        line-height: 1.55;
+        font-weight: 700;
+      }
+
+      .workflow .agreement-sidecopy .side-note {
+        border-top-color: rgba(235, 242, 255, 0.22);
+        color: #b7c6e8;
+      }
+
+      .agreement-layout .consensus-card {
+        width: 100%;
+        margin: 0;
+        min-width: 0;
+        padding: 22px;
+      }
+
+      .agreement-layout .consensus-heading h3 {
+        font-size: 25px;
+      }
+
+      .agreement-layout .comparison-board {
+        padding: 18px;
+      }
+
+      .agreement-layout .question-text {
+        font-size: 15px;
+        overflow-wrap: anywhere;
+      }
+
+      @media (max-width: 760px) {
+        .comparison-board {
+          padding: 14px;
+        }
+
+        .answer-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .answer-card {
+          min-height: 220px;
+        }
+
+        .answer-card.best {
+          grid-column: 1 / -1;
+        }
+
+        .agreement-layout {
+          grid-template-columns: 1fr;
+          gap: 24px;
+          margin-top: 48px;
+        }
+
+        .agreement-sidecopy {
+          padding-top: 0;
+        }
+      }
+
+      .model-result::before {
+        width: 3px;
+        align-self: stretch;
+        border-radius: 4px;
+        background: #5c9be8;
+        content: "";
+      }
+
+      .model-result:nth-child(2)::before {
+        background: #ef8c32;
+      }
+      .model-result:nth-child(3)::before {
+        background: #6c83d8;
+      }
+      .model-result:nth-child(4)::before {
+        background: #e6a34d;
+      }
+      .model-result:nth-child(5)::before {
+        background: #d96d8b;
+      }
+
+      .model-name {
+        flex: 1;
+        font-size: 15px;
+        font-weight: 600;
+      }
+
+      .model-state::before {
+        content: "✓";
+        font-size: 14px;
+      }
+
+      .model-result.differs .model-state {
+        background: #fbe9e5;
+        color: #b84a3d;
+      }
+
+      .model-result.differs .model-state::before {
+        content: "×";
+      }
+
+      @media (max-width: 760px) {
+        .capabilities,
+        .workflow {
+          padding: 76px 18px 82px;
+        }
+
+        .section-intro {
+          margin-bottom: 32px;
+        }
+
+        .section-description {
+          font-size: 16px;
+        }
+
+        .capability-grid,
+        .step-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .capability-card {
+          min-height: 0;
+        }
+
+        .capability-visual {
+          min-height: 190px;
+        }
+
+        .step-grid {
+          gap: 0;
+        }
+
+        .step-card {
+          padding: 22px 0 26px;
+        }
+
+        .consensus-preview {
+          margin-top: 48px;
+          padding: 17px 20px 22px;
+        }
+
+        .consensus-card {
+          padding: 23px 20px;
+        }
+
+        .consensus-heading {
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .model-result {
+          padding-left: 12px;
+        }
+      }
+
+      /* Further landing sections continue below the existing experience. */
+      .platform-section,
+      .comparison-section,
+      .savings-section,
+      .pricing-section,
+      .final-cta,
+      .site-footer {
+        position: relative;
+        display: block;
+      }
+
+      .platform-section {
+        padding: 120px max(28px, 7vw) 130px;
+        background: var(--sand);
+        color: var(--navy);
+      }
+
+      .platform-section .dark-kicker {
+        color: #3a5596;
+      }
+
+      .platform-section .dark-title {
+        color: var(--navy-deep);
+      }
+
+      .platform-section .dark-description {
+        color: var(--muted);
+      }
+
+      .platform-inner,
+      .comparison-inner,
+      .savings-inner,
+      .pricing-inner,
+      .footer-inner {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+      .dark-kicker {
+        margin: 0 0 18px;
+        color: #8ea6d8;
+        font-size: 14px;
+        font-weight: 700;
+      }
+
+      .dark-title {
+        max-width: 720px;
+        margin: 0;
+        color: var(--sand);
+        font-size: clamp(40px, 5vw, 68px);
+        letter-spacing: -0.06em;
+        line-height: 1.02;
+      }
+
+      .dark-description {
+        max-width: 600px;
+        margin: 20px 0 42px;
+        color: #b7c6e8;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .platform-stage {
+        position: relative;
+        height: 430px;
+        overflow: hidden;
+        border: 1px solid rgba(235, 242, 255, 0.12);
+        border-radius: 16px;
+        background:
+          radial-gradient(
+            circle at 50% 75%,
+            rgba(58, 85, 150, 0.55),
+            transparent 58%
+          ),
+          #081b2d;
+      }
+
+      .platform-window {
+        position: absolute;
+        right: 18%;
+        bottom: -20px;
+        left: 18%;
+        height: 300px;
+        padding: 48px 28px 24px;
+        border: 1px solid rgba(142, 166, 216, 0.5);
+        border-radius: 20px 20px 0 0;
+        background: linear-gradient(
+          180deg,
+          rgba(26, 42, 86, 0.9),
+          rgba(8, 27, 45, 0.92)
+        );
+        box-shadow: 0 0 70px rgba(0, 187, 249, 0.18);
+      }
+
+      .platform-window::before {
+        position: absolute;
+        top: 17px;
+        left: 24px;
+        width: 80px;
+        height: 8px;
+        border-radius: 8px;
+        background: #3a5596;
+        box-shadow:
+          100px 0 0 rgba(142, 166, 216, 0.38),
+          200px 0 0 rgba(142, 166, 216, 0.22);
+        content: "";
+      }
+
+      .platform-orbit {
+        position: absolute;
+        top: 47%;
+        left: 50%;
+        width: 76%;
+        height: 110px;
+        border: 1px dashed rgba(142, 166, 216, 0.4);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .platform-node {
+        position: absolute;
+        width: 56px;
+        height: 56px;
+        display: grid;
+        place-items: center;
+        border: 1px solid rgba(235, 242, 255, 0.28);
+        border-radius: 50%;
+        background: linear-gradient(145deg, #5c79b8, #1a2a56);
+        box-shadow: 0 10px 25px rgba(4, 16, 28, 0.5);
+        color: var(--mist);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+      }
+
+      .platform-node:nth-child(1) {
+        top: 38%;
+        left: 9%;
+      }
+      .platform-node:nth-child(2) {
+        top: 60%;
+        left: 29%;
+      }
+      .platform-node:nth-child(3) {
+        top: 61%;
+        left: 48%;
+      }
+      .platform-node:nth-child(4) {
+        top: 60%;
+        right: 29%;
+      }
+      .platform-node:nth-child(5) {
+        top: 38%;
+        right: 9%;
+      }
+
+      .frontier-logo-stage {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 38px;
+        padding: 34px;
+        overflow: hidden;
+        border: 1px solid rgba(235, 242, 255, 0.14);
+        border-radius: 16px;
+        background:
+          radial-gradient(
+            circle at center,
+            rgba(58, 85, 150, 0.48),
+            transparent 68%
+          ),
+          #081b2d;
+      }
+
+      .frontier-logo-stage::after {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          90deg,
+          rgba(8, 27, 45, 0.76),
+          transparent 25% 75%,
+          rgba(8, 27, 45, 0.76)
+        );
+        content: "";
+        pointer-events: none;
+      }
+
+      .frontier-logo {
+        position: relative;
+        z-index: 1;
+        min-height: 104px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+        border: 0;
+        border-radius: 11px;
+        background: transparent;
+        color: #b7c6e8;
+        font-size: 11px;
+        font-weight: 700;
+        opacity: 0.68;
+        animation: frontierFloat 6s ease-in-out infinite;
+      }
+
+      .frontier-logo:nth-child(2) {
+        animation-delay: -0.7s;
+      }
+      .frontier-logo:nth-child(3) {
+        animation-delay: -1.4s;
+      }
+      .frontier-logo:nth-child(4) {
+        animation-delay: -2.1s;
+      }
+      .frontier-logo:nth-child(5) {
+        animation-delay: -2.8s;
+      }
+      .frontier-logo:nth-child(6) {
+        animation-delay: -3.5s;
+      }
+      .frontier-logo:nth-child(7) {
+        animation-delay: -4.2s;
+      }
+      .frontier-logo:nth-child(8) {
+        animation-delay: -4.9s;
+      }
+      .frontier-logo:nth-child(9) {
+        animation-delay: -5.6s;
+      }
+
+      .frontier-logo img {
+        width: 38px;
+        height: 38px;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+        opacity: 0.88;
+      }
+
+      @keyframes frontierFloat {
+        0%,
+        100% {
+          opacity: 0.46;
+          transform: translateY(3px);
+        }
+        50% {
+          opacity: 0.92;
+          transform: translateY(-4px);
+        }
+      }
+
+      .devices-section {
+        padding: 82px max(28px, 7vw) 92px;
+        background: var(--ink);
+        color: var(--mist);
+      }
+
+      .devices-inner {
+        width: min(1180px, 100%);
+        margin: 0 auto;
+      }
+
+      .devices-section .dark-title {
+        font-weight: 800;
+        letter-spacing: 0.01em;
+        max-width: 850px;
+        font-size: clamp(38px, 4.2vw, 58px);
+        line-height: 1.04;
+      }
+
+      .devices-section .dark-description {
+        max-width: 720px;
+        margin: 14px 0 0;
+        font-size: 15px;
+        line-height: 1.5;
+      }
+
+      .devices-stage {
+        position: relative;
+        height: 460px;
+        margin-top: 48px;
+        overflow: hidden;
+        border: 1px solid rgba(235, 242, 255, 0.12);
+        border-radius: 16px;
+        background: linear-gradient(180deg, #171c2d 35%, #2a3f74 100%);
+      }
+
+      .laptop {
+        position: absolute;
+        top: 15%;
+        left: 11%;
+        width: 68%;
+        height: 72%;
+        border: 7px solid rgba(235, 242, 255, 0.24);
+        border-radius: 24px 24px 9px 9px;
+        background: linear-gradient(
+          135deg,
+          rgba(235, 242, 255, 0.2),
+          rgba(58, 85, 150, 0.38)
+        );
+        box-shadow: 0 20px 45px rgba(4, 16, 28, 0.4);
+      }
+
+      .laptop::after {
+        position: absolute;
+        right: -6%;
+        bottom: -12px;
+        left: -6%;
+        height: 12px;
+        border-radius: 0 0 12px 12px;
+        background: rgba(235, 242, 255, 0.24);
+        content: "";
+      }
+
+      .phone {
+        position: absolute;
+        right: 10%;
+        bottom: 9%;
+        width: 19%;
+        height: 67%;
+        padding: 26px 10px 12px;
+        border: 4px solid #5c79b8;
+        border-radius: 24px;
+        background: linear-gradient(
+          180deg,
+          rgba(235, 242, 255, 0.23),
+          rgba(136, 17, 39, 0.28)
+        );
+        box-shadow: 0 18px 40px rgba(4, 16, 28, 0.45);
+      }
+
+      .device-line {
+        height: 13px;
+        margin-bottom: 15px;
+        border-radius: 9px;
+        background: rgba(235, 242, 255, 0.28);
+      }
+
+      .device-line:nth-child(2) {
+        width: 70%;
+      }
+      .device-line:nth-child(3) {
+        width: 85%;
+      }
+      .device-line:nth-child(4) {
+        width: 62%;
+      }
+
+      .comparison-section,
+      .savings-section,
+      .pricing-section {
+        padding: 120px max(28px, 7vw) 130px;
+        background: var(--sand);
+        color: var(--navy);
+      }
+
+      .comparison-inner,
+      .savings-inner,
+      .pricing-inner {
+        text-align: center;
+      }
+
+      .comparison-title,
+      .savings-title,
+      .pricing-title {
+        max-width: 850px;
+        margin: 0 auto;
+        color: var(--navy-deep);
+        font-size: clamp(36px, 4.4vw, 58px);
+        letter-spacing: -0.04em;
+        line-height: 1.08;
+      }
+
+      .comparison-table {
+        width: min(980px, 100%);
+        margin: 46px auto 0;
+        border-collapse: collapse;
+        text-align: left;
+      }
+
+      .comparison-table th,
+      .comparison-table td {
+        padding: 20px 18px;
+        border-bottom: 1px solid var(--line);
+        font-size: 14px;
+        line-height: 1.55;
+      }
+
+      .comparison-table th {
+        color: var(--navy-deep);
+        font-weight: 800;
+        font-size: 13px;
+      }
+
+      .comparison-table td:first-child,
+      .comparison-table th:first-child {
+        width: 27%;
+        color: var(--navy-deep);
+        font-weight: 700;
+      }
+
+      .comparison-table td:nth-child(2) {
+        color: var(--navy-deep);
+        font-weight: 700;
+        background: rgba(235, 242, 255, 0.34);
+      }
+
+      .comparison-table td:nth-child(3) {
+        color: var(--muted);
+      }
+
+      .savings-description {
+        width: min(680px, 100%);
+        margin: 22px auto 50px;
+        color: var(--muted);
+        font-size: 18px;
+        line-height: 1.6;
+      }
+
+      .savings-list {
+        width: min(900px, 100%);
+        margin: 0 auto;
+        text-align: left;
+      }
+
+      .savings-row {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr 1fr;
+        gap: 20px;
+        padding: 22px 14px;
+        border-bottom: 1px solid var(--line);
+        color: var(--muted);
+      }
+
+      .savings-row strong {
+        color: var(--navy-deep);
+      }
+
+      .pricing-description {
+        margin: 20px 0 52px;
+        color: var(--muted);
+        font-size: 18px;
+      }
+
+      .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+        text-align: center;
+      }
+
+      .price-card {
+        position: relative;
+        min-height: 360px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 32px 16px 24px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.82);
+      }
+
+      .price-card:first-child,
+      .price-card:first-child {
+        border-color: #3a5596;
+        background: var(--mist);
+      }
+
+      .price-card h3 {
+        margin: 0;
+        color: var(--navy-deep);
+        font-size: 17px;
+      }
+
+      .price-card strong {
+        display: block;
+        margin: 24px 0 7px;
+        color: var(--navy-deep);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 25px;
+      }
+
+      .price-card p {
+        min-height: 58px;
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      .price-card a {
+        margin-top: auto;
+        padding: 13px 20px;
+        border: 1px solid var(--navy);
+        border-radius: 7px;
+        color: var(--navy-deep);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .price-card:first-child a,
+      .price-card:first-child a {
+        background: var(--navy);
+        color: var(--mist);
+      }
+
+      .price-card.is-selected {
+        border: 2px solid var(--navy);
+        background: var(--mist);
+        box-shadow: 0 12px 28px rgba(26, 42, 86, 0.16);
+        transform: translateY(-4px);
+      }
+
+      .price-card.is-selected::before {
+        position: absolute;
+        top: -12px;
+        left: 50%;
+        padding: 4px 9px;
+        border-radius: 999px;
+        background: var(--navy);
+        color: var(--mist);
+        content: "Selected";
+        font-size: 10px;
+        font-weight: 800;
+        transform: translateX(-50%);
+      }
+
+      .final-cta {
+        padding: 130px 28px;
+        background: var(--ink);
+        color: var(--mist);
+        text-align: center;
+      }
+
+      .final-cta h2 {
+        max-width: 650px;
+        margin: 0 auto;
+        color: var(--sand);
+        font-size: clamp(42px, 6vw, 76px);
+        letter-spacing: -0.065em;
+        line-height: 1;
+      }
+
+      .final-cta p {
+        margin: 22px auto 36px;
+        color: var(--navy-200, #b7c6e8);
+        font-size: 18px;
+      }
+
+      .final-cta a {
+        display: inline-block;
+        padding: 16px 25px;
+        border-radius: 8px;
+        background: var(--navy);
+        color: var(--mist);
+        text-decoration: none;
+        font-weight: 800;
+      }
+
+      .site-footer {
+        padding: 76px max(28px, 7vw) 90px;
+        background: var(--surface);
+        color: var(--muted);
+      }
+
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 1.6fr repeat(3, 1fr);
+        gap: 46px;
+      }
+
+      .footer-brand img {
+        width: 150px;
+        height: auto;
+        margin-bottom: 22px;
+      }
+
+      .footer-brand p {
+        max-width: 250px;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .footer-column h3 {
+        margin: 0 0 17px;
+        color: var(--navy);
+        font-size: 12px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+
+      .footer-column a {
+        display: block;
+        margin: 0 0 12px;
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+      }
+
+      .footer-column a:hover {
+        color: var(--navy);
+      }
+
+      .stack-stage {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 12px;
+        padding: 52px;
+        border: 1px solid rgba(235, 242, 255, 0.12);
+        border-radius: 16px;
+        background:
+          radial-gradient(
+            circle at center,
+            rgba(26, 42, 86, 0.7),
+            transparent 70%
+          ),
+          #081b2d;
+      }
+
+      .stack-tile {
+        min-height: 108px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 15px;
+        border: 1px solid rgba(235, 242, 255, 0.1);
+        border-radius: 12px;
+        background: rgba(26, 42, 86, 0.34);
+        color: var(--mist);
+        font-size: 14px;
+        font-weight: 700;
+        text-align: center;
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          background 220ms ease;
+      }
+
+      .stack-tile:hover {
+        border-color: rgba(142, 166, 216, 0.58);
+        background: rgba(58, 85, 150, 0.42);
+        transform: translateY(-3px);
+      }
+
+      .stack-tile img {
+        width: 34px;
+        height: 34px;
+        object-fit: contain;
+        filter: brightness(0) invert(1);
+        opacity: 0.86;
+      }
+
+      .stack-tile.deutschtec {
+        grid-column: 3;
+        grid-row: 1;
+        border-color: rgba(142, 166, 216, 0.66);
+        background: linear-gradient(145deg, #5c79b8, #1a2a56 54%, #081b2d);
+        box-shadow: 0 0 35px rgba(92, 121, 184, 0.28);
+      }
+
+      .stack-tile.deutschtec img {
+        width: 155px;
+        height: auto;
+        filter: brightness(0) invert(1);
+      }
+
+      .stack-tile.deutschtec:hover {
+        background: linear-gradient(145deg, #6f8dca, #2a3f74 54%, #081b2d);
+      }
+
+      .studio-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+        margin-top: 32px;
+      }
+
+      .studio-card {
+        min-height: 205px;
+        display: flex;
+        flex-direction: column;
+        padding: 18px;
+        border: 1px solid rgba(235, 242, 255, 0.16);
+        border-radius: 12px;
+        background: rgba(26, 42, 86, 0.62);
+        color: var(--mist);
+        transition:
+          transform 220ms ease,
+          border-color 220ms ease,
+          background 220ms ease;
+      }
+
+      .studio-card:hover {
+        border-color: rgba(142, 166, 216, 0.68);
+        background: rgba(42, 63, 116, 0.78);
+        transform: translateY(-4px);
+      }
+
+      .studio-icon {
+        width: 42px;
+        height: 42px;
+        display: grid;
+        place-items: center;
+        margin-bottom: 16px;
+        border-radius: 9px;
+        background: var(--navy);
+        color: var(--mist);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 15px;
+        font-weight: 500;
+      }
+
+      .studio-icon img {
+        width: 23px;
+        height: 23px;
+        filter: brightness(0) invert(1);
+      }
+
+      .studio-card:nth-child(2) .studio-icon {
+        background: #3a5596;
+      }
+
+      .studio-card:nth-child(1) .studio-icon {
+        background: #2a3f74;
+      }
+      .studio-card:nth-child(3) .studio-icon {
+        background: #00ad96;
+      }
+      .studio-card:nth-child(4) .studio-icon {
+        background: #b01834;
+      }
+
+      .studio-card h3 {
+        margin: 0 0 8px;
+        color: var(--sand);
+        font-size: 16px;
+      }
+
+      .studio-card p {
+        margin: 0;
+        color: #b7c6e8;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+
+      .studio-card small {
+        display: block;
+        margin-top: auto;
+        padding-top: 14px;
+        color: #8ea6d8;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .stack-tile:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+      }
+      .stack-tile:nth-child(2) {
+        grid-column: 2;
+        grid-row: 1;
+      }
+      .stack-tile:nth-child(4) {
+        grid-column: 4;
+        grid-row: 1;
+      }
+      .stack-tile:nth-child(5) {
+        grid-column: 5;
+        grid-row: 1;
+      }
+      .stack-tile:nth-child(6) {
+        grid-column: 1;
+        grid-row: 2;
+      }
+      .stack-tile:nth-child(7) {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .stack-tile:nth-child(8) {
+        grid-column: 3;
+        grid-row: 2;
+      }
+      .stack-tile:nth-child(9) {
+        grid-column: 4;
+        grid-row: 2;
+      }
+      .stack-tile:nth-child(10) {
+        grid-column: 5;
+        grid-row: 2;
+      }
+
+      .stack-monogram {
+        display: inline-grid;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        border: 1px solid rgba(235, 242, 255, 0.42);
+        border-radius: 9px;
+        color: var(--mist);
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 13px;
+      }
+
+      .footer-legal {
+        width: min(1180px, 100%);
+        margin: 58px auto 0;
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.7;
+      }
+
+      .footer-legal p {
+        margin: 0;
+      }
+
+      .footer-legal a {
+        color: var(--navy);
+        text-decoration: none;
+      }
+
+      .footer-legal a:hover {
+        color: #3a5596;
+      }
+
+      @media (max-width: 900px) {
+        .pricing-grid {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+
+      @media (max-width: 760px) {
+        .platform-section,
+        .devices-section,
+        .comparison-section,
+        .savings-section,
+        .pricing-section {
+          padding: 78px 18px 88px;
+        }
+
+        .platform-stage,
+        .devices-stage {
+          height: 280px;
+        }
+
+        .platform-window {
+          right: 8%;
+          left: 8%;
+          height: 190px;
+          padding: 32px 16px 14px;
+        }
+
+        .platform-node {
+          width: 40px;
+          height: 40px;
+          font-size: 10px;
+        }
+
+        .laptop {
+          top: 20%;
+          left: 7%;
+          width: 77%;
+          height: 65%;
+        }
+
+        .phone {
+          right: 5%;
+          width: 24%;
+          height: 59%;
+        }
+
+        .comparison-table {
+          display: block;
+          overflow-x: auto;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+          min-width: 150px;
+        }
+
+        .savings-row {
+          grid-template-columns: 1fr;
+          gap: 5px;
+        }
+
+        .pricing-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 32px 22px;
+        }
+
+        .footer-brand {
+          grid-column: 1 / -1;
+        }
+
+        .stack-stage {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 9px;
+          padding: 18px;
+        }
+
+        .stack-tile,
+        .stack-tile.deutschtec {
+          min-height: 82px;
+          grid-column: auto;
+          grid-row: auto;
+          font-size: 11px;
+        }
+
+        .stack-tile.deutschtec {
+          grid-column: 1 / -1;
+          grid-row: 2;
+        }
+
+        .stack-tile.deutschtec img {
+          width: 145px;
+        }
+
+        .stack-tile img,
+        .stack-monogram {
+          width: 27px;
+          height: 27px;
+        }
+      }
+
+      @media (max-width: 430px) {
+        .pricing-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .footer-brand {
+          grid-column: auto;
+        }
+      }
+
+      @media (max-width: 760px) {
+        .devices-section .stack-stage {
+          width: 100%;
+          min-width: 0;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .devices-section .stack-tile,
+        .devices-section .stack-tile.deutschtec {
+          grid-column: auto;
+          grid-row: auto;
+          min-width: 0;
+        }
+
+        .devices-section .stack-tile.deutschtec {
+          grid-column: 1 / -1;
+        }
+
+        .frontier-logo-stage {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 8px;
+          padding: 16px;
+        }
+
+        .frontier-logo {
+          min-height: 82px;
+          font-size: 9px;
+        }
+
+        .frontier-logo img {
+          width: 28px;
+          height: 28px;
+        }
+
+        .studio-grid {
+          grid-template-columns: 1fr;
+          gap: 10px;
+          margin-top: 34px;
+        }
+
+        .studio-card {
+          min-height: 0;
+        }
+      }
+
+      /* Restrained motion: short reveals, small lifts, no distracting spectacle. */
+      @keyframes heroEnter {
+        from {
+          opacity: 0;
+          transform: translateY(14px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .hero-content {
+        animation: heroEnter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+      }
+
+      .motion-ready .reveal-target {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 480ms ease,
+          transform 480ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      .motion-ready .reveal-target.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .capability-card,
+      .price-card,
+      .final-cta a,
+      .footer-column a {
+        transition:
+          transform 220ms ease,
+          box-shadow 220ms ease,
+          color 160ms ease;
+      }
+
+      .capability-card:hover,
+      .price-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 18px 38px rgba(26, 42, 86, 0.12);
+      }
+
+      .step-card {
+        transition:
+          border-color 220ms ease,
+          transform 220ms ease;
+      }
+
+      .step-card:hover {
+        border-color: var(--navy);
+        transform: translateY(-3px);
+      }
+
+      .final-cta a:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 24px rgba(58, 85, 150, 0.28);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hero-content,
+        .motion-ready .reveal-target,
+        .capability-card,
+        .price-card,
+        .step-card,
+        .final-cta a,
+        .footer-column a {
+          animation: none !important;
+          transform: none !important;
+          transition: none !important;
+        }
+      }
+
+      /* Navy workflow surface with light, readable Deutschtec palette roles. */
+      .workflow {
+        background: var(--ink);
+        color: var(--mist);
+      }
+
+      .workflow .section-title {
+        color: var(--sand);
+      }
+
+      .workflow .section-kicker,
+      .workflow .agreement-sidecopy .section-kicker {
+        color: #b7c6e8;
+      }
+
+      .workflow .step-grid {
+        border-top-color: rgba(235, 242, 255, 0.22);
+      }
+
+      .workflow .step-card {
+        border-top-color: #8ea6d8;
+      }
+
+      .workflow .step-number {
+        color: #b7c6e8;
+      }
+
+      .workflow .step-card h3,
+      .workflow .agreement-sidecopy h3 {
+        color: var(--sand);
+      }
+
+      .workflow .step-card p,
+      .workflow .agreement-sidecopy p {
+        color: #d8dff3;
+      }
+
+      .workflow .agreement-sidecopy .side-note {
+        border-top-color: rgba(235, 242, 255, 0.22);
+        color: #b7c6e8;
+      }
+
+      .workflow .consensus-card {
+        border-color: rgba(142, 166, 216, 0.5);
+        background: #f8fafc;
+      }
+
+      .workflow .confidence-pill,
+      .workflow .model-state {
+        background: var(--mist);
+        color: var(--navy);
+      }
+
+      /* Tablet layouts: preserve the desktop design above 1023px, but give cards and answers room to read. */
+      @media (min-width: 561px) and (max-width: 1023px) {
+        .capability-grid,
+        .studio-grid,
+        .pricing-grid,
+        .footer-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .answer-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .answer-card.best {
+          grid-column: 1 / -1;
+        }
+
+        .agreement-layout {
+          grid-template-columns: 1fr;
+        }
+
+        .agreement-sidecopy {
+          padding-top: 0;
+        }
+
+        .comparison-table {
+          width: 100%;
+        }
+
+        .frontier-logo-stage {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .footer-brand {
+          grid-column: 1 / -1;
+        }
+
+        .pricing-grid {
+          gap: 12px;
+        }
+
+        .price-card {
+          min-height: 300px;
+          padding: 24px 14px 18px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        .pricing-grid {
+          gap: 10px;
+        }
+
+        .price-card {
+          min-height: 260px;
+          padding: 22px 12px 16px;
+        }
+
+        .price-card strong {
+          margin-top: 16px;
+          font-size: 22px;
+        }
+
+        .price-card p {
+          min-height: 42px;
+          font-size: 12px;
+        }
+
+        .price-card a {
+          padding: 10px 13px;
+          font-size: 12px;
+        }
+      }
+
+      /* Last phone cascade wins over earlier template rules. */
+      @media (max-width: 560px) {
+        .mobile-menu summary {
+          width: 26px !important;
+          height: 26px !important;
+          padding: 0 !important;
+          overflow: hidden !important;
+          color: transparent !important;
+          font-size: 0 !important;
+          line-height: 0 !important;
+          text-indent: -9999px;
+        }
+
+        .header-inner {
+          width: calc(100% - 24px) !important;
+          gap: 7px !important;
+        }
+
+        .composer input {
+          font-size: 12px !important;
+        }
+        .header-actions {
+          gap: 6px !important;
+          min-width: 0;
+        }
+
+        .header-button {
+          padding: 7px 10px !important;
+          font-size: 11px !important;
+        }
+
+        .language-button {
+          gap: 3px;
+        }
+
+        .language-button svg {
+          width: 18px;
+          height: 18px;
+        }
+
+        .selected-language-flag {
+          width: 16px !important;
+          height: 11px !important;
+        }
+
+        .mobile-menu summary::before {
+          top: 8px;
+          left: 2px;
+          width: 20px;
+          box-shadow:
+            0 6px 0 var(--ink),
+            0 12px 0 var(--ink);
+        }
+
+        .hero {
+          min-height: auto !important;
+        }
+
+        .hero-content {
+          padding-bottom: 44px !important;
+        }
+
+        .language-button {
+          gap: 3px;
+        }
+
+        .selected-language-flag {
+          width: 17px;
+          height: 12px;
+        }
+
+        .hero-content {
+          padding-top: 54px !important;
+        }
+
+        .answer-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          row-gap: 26px;
+          align-items: stretch;
+        }
+
+        .answer-card,
+        .answer-card.best {
+          grid-column: auto !important;
+          min-height: 220px;
+        }
+
+        .comparison-title,
+        .pricing-title {
+          max-width: 360px;
+          margin-inline: auto;
+          font-size: clamp(30px, 8.5vw, 38px);
+          line-height: 1.08;
+          letter-spacing: -0.035em;
+        }
+
+        .comparison-table {
+          width: 100%;
+          table-layout: fixed;
+          overflow: visible;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+          min-width: 0 !important;
+          width: auto;
+          padding: 13px 8px;
+          font-size: 11px;
+          line-height: 1.45;
+          overflow-wrap: anywhere;
+          word-break: normal;
+        }
+
+        .comparison-table td:first-child,
+        .comparison-table th:first-child {
+          width: 28%;
+        }
+
+        .comparison-table td:nth-child(2),
+        .comparison-table th:nth-child(2),
+        .comparison-table td:nth-child(3),
+        .comparison-table th:nth-child(3) {
+          width: 36%;
+        }
+
+        .pricing-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          gap: 9px;
+        }
+
+        .price-card {
+          min-height: 245px;
+          padding: 18px 10px 14px;
+          border-radius: 10px;
+        }
+
+        .price-card h3 {
+          font-size: 15px;
+        }
+
+        .price-card strong {
+          margin-top: 14px;
+          font-size: 20px;
+        }
+
+        .price-card p {
+          min-height: 38px;
+          font-size: 11px;
+        }
+
+        .price-card a {
+          padding: 9px 10px;
+          font-size: 11px;
+        }
+      }
+
+      @media (max-width: 340px) {
+        .brand-logo {
+          width: 98px !important;
+        }
+
+        .header-button {
+          padding-inline: 8px !important;
+          font-size: 10px !important;
+        }
+
+        .language-button svg {
+          width: 18px;
+          height: 18px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="#top" aria-label="Deutschtec home">
+          <img
+            class="brand-logo"
+            src="/deutschtec-wordmark.png"
+            alt="Deutschtec AI"
+          />
+        </a>
+
+        <nav class="primary-nav" aria-label="Primary navigation">
+          <a class="nav-with-arrow" href="#how-it-works">Product</a>
+          <a class="nav-with-arrow" href="#features">Solutions</a>
+          <a href="#models">Models</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#trust">Security</a>
+        </nav>
+
+        <details class="mobile-menu">
+          <summary>Menu</summary>
+          <nav aria-label="Mobile navigation">
+            <a href="#how-it-works">Product</a>
+            <a href="#features">Solutions</a>
+            <a href="#models">Models</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#trust">Security</a>
+          </nav>
+        </details>
+
+        <div class="header-actions">
+          <a class="login-link" href="https://app.deutschtec.ai/">Sign in</a>
+          <div class="language-picker">
+            <button
+              class="language-button"
+              id="language-toggle"
+              type="button"
+              aria-label="Choose language"
+              aria-expanded="false"
+              aria-controls="language-menu"
+              title="Choose language"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9.25"></circle>
+                <path
+                  d="M2.75 12h18.5M12 2.75c2.15 2.3 3.25 5.38 3.25 9.25S14.15 18.95 12 21.25M12 2.75C9.85 5.05 8.75 8.13 8.75 12S9.85 18.95 12 21.25"
+                ></path>
+              </svg>
+              <img
+                id="selected-language-flag"
+                class="selected-language-flag"
+                src="/flag-gb.svg"
+                alt="English"
+              />
+            </button>
+            <div
+              class="language-menu"
+              id="language-menu"
+              role="radiogroup"
+              aria-label="Language"
+              hidden
+            >
+              <button
+                class="language-option"
+                type="button"
+                role="radio"
+                aria-checked="true"
+                data-language="en"
+              >
+                <img
+                  class="language-flag en"
+                  src="/flag-gb.svg"
+                  alt=""
+                  role="img"
+                  aria-label="United Kingdom flag"
+                />
+                English <span>EN</span>
+              </button>
+              <button
+                class="language-option"
+                type="button"
+                role="radio"
+                aria-checked="false"
+                data-language="de"
+              >
+                <img
+                  class="language-flag de"
+                  src="/flag-de.svg"
+                  alt=""
+                  role="img"
+                  aria-label="German flag"
+                />
+                Deutsch <span>DE</span>
+              </button>
+            </div>
+          </div>
+          <a class="header-button" href="https://app.deutschtec.ai/"
+            >Try it free</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main id="top" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">Cross-checked intelligence from Germany</p>
+        <h1>Ask once. <span>Compare leading AIs.</span></h1>
+        <p class="hero-copy">
+          Get answers from ChatGPT, Claude, Gemini, DeepSeek and more — side by
+          side. See where they agree and where they differ.
+        </p>
+
+        <form class="composer" id="question-form">
+          <div class="composer-row">
+            <button
+              class="composer-tool"
+              type="button"
+              aria-label="Add a document"
+            >
+              +
+            </button>
+            <input
+              id="question"
+              name="question"
+              type="text"
+              autocomplete="off"
+              placeholder="Ask a question..."
+              aria-label="Ask several AIs a question"
+            />
+            <div class="mode-picker">
+              <button
+                class="composer-mode"
+                id="mode-toggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="mode-menu"
+              >
+                <span id="mode-label">Compare</span>
+                <span class="mode-chevron" aria-hidden="true">&#9662;</span>
+              </button>
+              <div
+                class="mode-menu"
+                id="mode-menu"
+                role="radiogroup"
+                aria-label="Answer mode"
+                hidden
+              >
+                <button
+                  class="mode-option"
+                  type="button"
+                  role="radio"
+                  aria-checked="false"
+                  data-mode="single"
+                >
+                  Single
+                </button>
+                <button
+                  class="mode-option"
+                  type="button"
+                  role="radio"
+                  aria-checked="true"
+                  data-mode="compare"
+                >
+                  Compare
+                </button>
+              </div>
+            </div>
+            <button class="composer-submit" type="submit">Ask</button>
+          </div>
+          <div class="composer-footer">
+            <span class="composer-hint"
+              >No daily limit · 50 signup credits on top</span
+            >
+            <span class="composer-status" id="composer-status"
+              >Auto chat free</span
+            >
+          </div>
+        </form>
+
+        <div class="model-marquee" aria-label="AI models used by Deutschtec">
+          <div class="model-marquee-track">
+            <div class="model-set">
+              <span class="model-item"
+                ><img src="/model-openai.png" alt="" />OpenAI</span
+              >
+              <span class="model-item"
+                ><img src="/model-anthropic.png" alt="" />Anthropic</span
+              >
+              <span class="model-item"
+                ><img src="/model-google.png" alt="" />Google</span
+              >
+              <span class="model-item"
+                ><img src="/model-xai.png" alt="" />xAI</span
+              >
+              <span class="model-item"
+                ><img src="/model-deepseek.png" alt="" />DeepSeek</span
+              >
+              <span class="model-item"
+                ><img src="/model-meta.png" alt="" />Meta</span
+              >
+              <span class="model-item"
+                ><img src="/model-mistral.png" alt="" />Mistral</span
+              >
+              <span class="model-item"
+                ><img src="/model-qwen.png" alt="" />Qwen</span
+              >
+              <span class="model-item"
+                ><img src="/model-moonshot.png" alt="" />Moonshot</span
+              >
+            </div>
+            <div class="model-set" aria-hidden="true">
+              <span class="model-item"
+                ><img src="/model-openai.png" alt="" />OpenAI</span
+              >
+              <span class="model-item"
+                ><img src="/model-anthropic.png" alt="" />Anthropic</span
+              >
+              <span class="model-item"
+                ><img src="/model-google.png" alt="" />Google</span
+              >
+              <span class="model-item"
+                ><img src="/model-xai.png" alt="" />xAI</span
+              >
+              <span class="model-item"
+                ><img src="/model-deepseek.png" alt="" />DeepSeek</span
+              >
+              <span class="model-item"
+                ><img src="/model-meta.png" alt="" />Meta</span
+              >
+              <span class="model-item"
+                ><img src="/model-mistral.png" alt="" />Mistral</span
+              >
+              <span class="model-item"
+                ><img src="/model-qwen.png" alt="" />Qwen</span
+              >
+              <span class="model-item"
+                ><img src="/model-moonshot.png" alt="" />Moonshot</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <section
+      class="capabilities"
+      id="features"
+      aria-labelledby="capabilities-title"
+    >
+      <div class="section-intro">
+        <p class="section-kicker">What you get</p>
+        <h2 class="section-title" id="capabilities-title">
+          One platform. Several perspectives. Built to be trusted.
+        </h2>
+        <p class="section-description">
+          Compare leading AI models in one place — with hosting in Germany, no
+          training on your data, clear AI labelling, and fair billing.
+        </p>
+      </div>
+
+      <div class="capability-grid">
+        <article class="capability-card">
+          <div class="capability-visual">
+            <div class="visual-security trust-visual">
+              <span class="germany-flag" role="img" aria-label="German flag"
+                ><span></span><span></span><span></span
+              ></span>
+              <strong>AWS Frankfurt</strong
+              ><span>Account and history hosted in Germany</span>
+            </div>
+          </div>
+          <div class="capability-copy">
+            <h3>Hosted in Germany</h3>
+            <p>
+              Your account, chat history and uploads are stored in AWS
+              Frankfurt.
+            </p>
+          </div>
+        </article>
+
+        <article class="capability-card">
+          <div class="capability-visual">
+            <div class="visual-security trust-visual">
+              <span class="capability-icon" aria-hidden="true"
+                ><svg viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="8.5"></circle>
+                  <path d="m6 6 12 12"></path></svg
+              ></span>
+              <strong>Private by default</strong
+              ><span>Prompts stay out of model training</span>
+            </div>
+          </div>
+          <div class="capability-copy">
+            <h3>No training on your data</h3>
+            <p>
+              Your prompts and answers are not used to train our own models.
+            </p>
+          </div>
+        </article>
+
+        <article class="capability-card">
+          <div class="capability-visual">
+            <div class="visual-compare">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <div class="capability-copy">
+            <h3>AI labelling under Art. 50 EU AI Act</h3>
+            <p>AI-generated output is clearly labelled in the app.</p>
+          </div>
+        </article>
+
+        <article class="capability-card">
+          <div class="capability-visual">
+            <div class="visual-security trust-visual">
+              <span class="capability-icon" aria-hidden="true"
+                ><svg viewBox="0 0 24 24">
+                  <path d="M6 7h12v13H6z"></path>
+                  <path d="M8 7V5h8v2M9 12h6M9 16h4"></path></svg
+              ></span>
+              <strong>Fair billing</strong><span>Call failed?</span
+              ><span>€0 charged</span>
+            </div>
+          </div>
+          <div class="capability-copy">
+            <h3>Failed calls are never charged</h3>
+            <p>If a model does not answer, you do not pay for it.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section
+      class="workflow"
+      id="how-it-works"
+      aria-labelledby="workflow-title"
+    >
+      <div class="workflow-inner">
+        <h2 class="section-title" id="workflow-title">How it works</h2>
+
+        <div class="step-grid">
+          <article class="step-card">
+            <span class="step-number">01</span>
+            <h3>Ask</h3>
+            <p>
+              Ask your question the way you would in any chat. No prompt craft
+              required.
+            </p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">02</span>
+            <h3>Compare</h3>
+            <p>
+              Your question goes to several leading models at once. Each answers
+              independently.
+            </p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">03</span>
+            <h3>Check</h3>
+            <p>
+              A coordinator merges the answers, cites sources, and marks where
+              the models contradict each other.
+            </p>
+          </article>
+        </div>
+
+        <div class="agreement-layout">
+          <div class="agreement-sidecopy">
+            <p class="section-kicker">Cross-checked answers</p>
+            <h3>See every perspective before you decide.</h3>
+            <p>
+              Deutschtec sends one question to several leading AI models at
+              once, then puts the answers side by side so agreement and
+              disagreement are visible immediately.
+            </p>
+            <p class="side-note">
+              One question. Several independent answers. One clearer decision.
+            </p>
+          </div>
+          <div class="consensus-card expanded">
+            <div class="consensus-heading">
+              <h3>Compare answers side by side</h3>
+              <span class="confidence-pill">high confidence</span>
+            </div>
+            <div class="comparison-board">
+              <p class="question-label">Your question</p>
+              <p class="question-text">
+                &quot;Could humans build a self-sustaining city on Mars by
+                2050?&quot;
+              </p>
+              <div
+                class="answer-grid"
+                aria-label="AI answers compared side by side"
+              >
+                <article class="answer-card">
+                  <strong class="answer-name">ChatGPT</strong>
+                  <p class="answer-copy">
+                    Possible in principle, but energy and food systems are the
+                    biggest barriers. Early settlements would need redundant
+                    power and reliable closed-loop agriculture.
+                  </p>
+                  <span class="answer-tag">Strong</span>
+                </article>
+                <article class="answer-card best">
+                  <strong class="answer-name">Claude</strong>
+                  <p class="answer-copy">
+                    An outpost is plausible; a self-sustaining city by 2050 is
+                    unlikely. The timeline depends on local resource use and
+                    durable radiation protection.
+                  </p>
+                  <span class="answer-tag">Best Aligned</span>
+                </article>
+                <article class="answer-card">
+                  <strong class="answer-name">Gemini</strong>
+                  <p class="answer-copy">
+                    Local resources could help, but transport costs make the
+                    timeline uncertain. Water ice and fuel production would be
+                    decisive advantages.
+                  </p>
+                  <span class="answer-tag">Good</span>
+                </article>
+                <article class="answer-card">
+                  <strong class="answer-name">DeepSeek</strong>
+                  <p class="answer-copy">
+                    Water, power, habitats, and food must work without Earth
+                    resupply. A single weak link would keep the settlement
+                    dependent on regular missions.
+                  </p>
+                  <span class="answer-tag">Agree</span>
+                </article>
+                <article class="answer-card differs">
+                  <strong class="answer-name">Mistral</strong>
+                  <p class="answer-copy">
+                    Technically imaginable, but today’s launch cadence makes
+                    2050 ambitious. Governance and human health risks are also
+                    unresolved.
+                  </p>
+                  <span class="answer-tag">Differs</span>
+                </article>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="platform-section" aria-labelledby="platform-title">
+      <div class="platform-inner">
+        <p class="dark-kicker">Leading models, one answer</p>
+        <h2 class="dark-title" id="platform-title">
+          We poll the frontier, not one vendor.
+        </h2>
+        <p class="dark-description">
+          Answers come from leading models across OpenAI, Anthropic, Google, xAI
+          and DeepSeek, among others.
+        </p>
+        <div
+          class="frontier-logo-stage"
+          aria-label="Leading AI models used by Deutschtec"
+        >
+          <span class="frontier-logo"
+            ><img src="/model-openai.png" alt="" />OpenAI</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-anthropic.png" alt="" />Anthropic</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-google.png" alt="" />Google</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-xai.png" alt="" />xAI</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-deepseek.png" alt="" />DeepSeek</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-meta.png" alt="" />Meta</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-mistral.png" alt="" />Mistral</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-qwen.png" alt="" />Qwen</span
+          >
+          <span class="frontier-logo"
+            ><img src="/model-moonshot.png" alt="" />Moonshot</span
+          >
+        </div>
+      </div>
+    </section>
+
+    <section class="devices-section" aria-labelledby="devices-title">
+      <div class="devices-inner">
+        <p class="dark-kicker">Files and studios</p>
+        <h2 class="dark-title" id="devices-title">
+          Structured outputs from multi-model work
+        </h2>
+        <p class="dark-description">
+          Inside chat, create files, edit uploaded files, generate new outputs,
+          and keep working with the same AI models. For larger work, turn
+          verified model output into documents, presentations, spreadsheets, and
+          images.
+        </p>
+        <div
+          class="studio-grid"
+          aria-label="Deutschtec file and studio outputs"
+        >
+          <article class="studio-card">
+            <span class="studio-icon"
+              ><img src="/studio-word.svg" alt=""
+            /></span>
+            <h3>Document Studio</h3>
+            <p>
+              Create and edit longer reports, proposals, summaries, briefs, and
+              exportable documents.
+            </p>
+            <small>DOCX, PDF, Markdown, HTML</small>
+          </article>
+          <article class="studio-card">
+            <span class="studio-icon"
+              ><img src="/studio-powerpoint.svg" alt=""
+            /></span>
+            <h3>Presentation Studio</h3>
+            <p>
+              Generate editable slide decks from prompts, notes, reports, or
+              existing presentation material.
+            </p>
+            <small>PowerPoint-ready PPTX</small>
+          </article>
+          <article class="studio-card">
+            <span class="studio-icon"
+              ><img src="/studio-excel.svg" alt=""
+            /></span>
+            <h3>Excel Studio</h3>
+            <p>
+              Create, clean, analyze, and transform spreadsheets with built-in
+              AI and data tools.
+            </p>
+            <small>XLSX, CSV, TSV, XLS</small>
+          </article>
+          <article class="studio-card">
+            <span class="studio-icon"
+              ><img src="/studio-image.svg" alt=""
+            /></span>
+            <h3>Image Studio</h3>
+            <p>
+              Generate images, edit visuals with instructions, remove
+              backgrounds, and chain edits.
+            </p>
+            <small>Generate, edit, download</small>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="comparison-section"
+      id="models"
+      aria-labelledby="comparison-title"
+    >
+      <div class="comparison-inner">
+        <p class="section-kicker">Compared</p>
+        <h2 class="comparison-title" id="comparison-title">
+          One account instead of a subscription per vendor.
+        </h2>
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Deutschtec</th>
+              <th>A single AI subscription</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Models</td>
+              <td>Several providers, freely chosen in Compare</td>
+              <td>One provider</td>
+            </tr>
+            <tr>
+              <td>Cross-checking</td>
+              <td>
+                2–10 models answer independently, then a coordinator merges them
+              </td>
+              <td>One answer, no second opinion</td>
+            </tr>
+            <tr>
+              <td>Cost</td>
+              <td>Per use, from €0 — Auto chat is free</td>
+              <td>Fixed monthly fee</td>
+            </tr>
+            <tr>
+              <td>Failed calls</td>
+              <td>Never charged</td>
+              <td>Included whether used or not</td>
+            </tr>
+            <tr>
+              <td>Hosting</td>
+              <td>Account and history in Germany</td>
+              <td>Varies</td>
+            </tr>
+            <tr>
+              <td>Languages</td>
+              <td>Nine, with genuine RTL</td>
+              <td>Varies</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="savings-section" aria-labelledby="savings-title">
+      <div class="savings-inner">
+        <p class="section-kicker">What it saves</p>
+        <h2 class="savings-title" id="savings-title">
+          One balance instead of three subscriptions.
+        </h2>
+        <p class="savings-description">
+          Using several AIs seriously can mean paying for several subscriptions
+          in parallel. With Deutschtec, everyday chat is free and you pay when
+          you want several models checked against each other.
+        </p>
+        <div class="savings-list">
+          <div class="savings-row">
+            <strong>Three separate subscriptions</strong
+            ><strong>about €60–70 per month</strong
+            ><span>fixed, even when unused</span>
+          </div>
+          <div class="savings-row">
+            <strong>Deutschtec, chat only</strong><strong>€0</strong
+            ><span>forever, no daily limit</span>
+          </div>
+          <div class="savings-row">
+            <strong>Deutschtec Tier 1</strong><strong>€11.89 per month</strong
+            ><span>1,000 credits ≈ 250 compare answers</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="pricing-section"
+      id="pricing"
+      aria-labelledby="pricing-title"
+    >
+      <div class="pricing-inner">
+        <p class="section-kicker">Pricing</p>
+        <h2 class="pricing-title" id="pricing-title">
+          Start free. Pay when it earns it.
+        </h2>
+        <p class="pricing-description">
+          All prices include 19% VAT. Cancel monthly.
+        </p>
+        <div class="pricing-grid">
+          <article class="price-card is-selected">
+            <h3>Free</h3>
+            <strong>€0</strong>
+            <p>Auto chat, unlimited</p>
+            <a href="https://app.deutschtec.ai/">Try it free</a>
+          </article>
+          <article class="price-card">
+            <h3>Tier 1</h3>
+            <strong>€11.89</strong>
+            <p>1,000 credits per month</p>
+            <a href="https://app.deutschtec.ai/">Choose</a>
+          </article>
+          <article class="price-card">
+            <h3>Tier 2</h3>
+            <strong>€23.79</strong>
+            <p>2,100 credits per month</p>
+            <a href="https://app.deutschtec.ai/">Choose</a>
+          </article>
+          <article class="price-card">
+            <h3>Tier 3</h3>
+            <strong>€59.49</strong>
+            <p>5,500 credits per month</p>
+            <a href="https://app.deutschtec.ai/">Choose</a>
+          </article>
+          <article class="price-card">
+            <h3>Tier 4</h3>
+            <strong>€118.99</strong>
+            <p>12,000 credits per month</p>
+            <a href="https://app.deutschtec.ai/">Choose</a>
+          </article>
+          <article class="price-card">
+            <h3>Tier 5</h3>
+            <strong>€237.99</strong>
+            <p>25,000 credits per month</p>
+            <a href="https://app.deutschtec.ai/">Choose</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="final-title">
+      <h2 id="final-title">Stop trusting a single answer.</h2>
+      <p>Auto chat is free. You do not need a card to begin.</p>
+      <a href="https://app.deutschtec.ai/">Ask your first question</a>
+    </section>
+
+    <footer class="site-footer">
+      <div class="footer-inner footer-grid">
+        <div class="footer-brand">
+          <img src="/deutschtec-wordmark.png" alt="Deutschtec AI" />
+          <p>
+            One question, several AI models, one cross-checked answer. Auto chat
+            is free.
+          </p>
+        </div>
+        <div class="footer-column">
+          <h3>Product</h3>
+          <a href="#top">Start free</a><a href="#how-it-works">How it works</a
+          ><a href="#features">Features</a><a href="#pricing">Pricing</a>
+        </div>
+        <div class="footer-column">
+          <h3>Company</h3>
+          <a href="https://deutschtec.ai/en/referral-terms">Referral</a
+          ><a href="https://deutschtec.ai/en/support">Support</a
+          ><a href="https://deutschtec.ai/en/delete-account">Delete account</a
+          ><a href="https://deutschtec.ai/en/verify">Verify an image</a>
+        </div>
+        <div class="footer-column">
+          <h3>Legal</h3>
+          <a href="https://deutschtec.ai/en/imprint">Imprint</a
+          ><a href="https://deutschtec.ai/en/privacy">Privacy</a
+          ><a href="https://deutschtec.ai/en/terms">Terms</a
+          ><a href="https://deutschtec.ai/en/refund">Refunds</a
+          ><a href="https://deutschtec.ai/en/withdrawal">Withdrawal</a>
+        </div>
+      </div>
+      <div class="footer-legal">
+        <p>
+          © 2026 Deutschtec GmbH · Am Fuchsbau 13 · 15345 Petershagen/Eggersdorf
+          · Amtsgericht Charlottenburg HRB 103945 B
+        </p>
+        <p>
+          <a href="mailto:info@deutschtec.ai">info@deutschtec.ai</a> ·
+          <a href="tel:+493341302240">+49 (0)3341 30 22 4-0</a>
+        </p>
+      </div>
+    </footer>
+
+    <section class="trust-strip" id="trust" aria-label="What you can rely on">
+      <div class="trust-grid">
+        <article class="trust-card">
+          <div class="trust-icon" aria-hidden="true">01</div>
+          <h2>Hosted in Germany</h2>
+          <p>
+            Your account, chat history and uploads are stored with AWS in
+            Frankfurt. Servers are in the EU.
+          </p>
+        </article>
+        <article class="trust-card">
+          <div class="trust-icon" aria-hidden="true">02</div>
+          <h2>No training on your data</h2>
+          <p>We do not use your prompts or answers to train our own models.</p>
+        </article>
+        <article class="trust-card">
+          <div class="trust-icon" aria-hidden="true">03</div>
+          <h2>Failed calls are never charged</h2>
+          <p>
+            If a model does not answer, it is not billed. You pay for answers
+            delivered.
+          </p>
+        </article>
+        <article class="trust-card">
+          <div class="trust-icon" aria-hidden="true">04</div>
+          <h2>AI labelling under Art. 50 EU AI Act</h2>
+          <p>
+            AI output is visibly labelled in the app and images can be checked
+            publicly.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="problem" id="how">
+      <div class="problem-inner">
+        <p class="problem-label">The problem</p>
+        <h2>One model is one opinion.</h2>
+        <p>
+          A single AI always answers confidently, including when it is wrong.
+          Nothing in the answer tells you which one you are looking at. That is
+          the expensive part: either you check everything by hand, or you trust
+          something nobody checked.
+        </p>
+      </div>
+    </section>
+
+    <script src="/src/app.js"></script>
+  </body>
+</html>

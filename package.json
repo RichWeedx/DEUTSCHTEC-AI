@@ -1,0 +1,12 @@
+{
+  "name": "deutschtec-ai",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --open"
+  },
+  "devDependencies": {
+    "vite": "^7.1.5"
+  }
+}

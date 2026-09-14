@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deutschtec.ai — Extended Color System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── Foundation (from Color Palette 02 — unchanged) ── */
+  --ink:#081B2D; --navy:#1A2A56; --mist:#EBF2FF; --sand:#F5ECE1;
+  --ochre:#E4B85C; --crimson:#881127;
+
+  /* ── Signal Aqua (new) ── */
+  --aqua-50:#ECFEFC; --aqua-100:#CCFFF8; --aqua-200:#99FFF1; --aqua-300:#4DFCDE;
+  --aqua-400:#00F5D4; --aqua-500:#00D6BA; --aqua-600:#00AD96; --aqua-700:#027A6A;
+  --aqua-800:#06584D; --aqua-900:#063A33; --aqua-950:#04231F;
+
+  /* ── Sky (new, support) ── */
+  --sky-50:#E5F6FF; --sky-100:#CCF2FF; --sky-200:#99E6FF; --sky-300:#5CD6FF;
+  --sky-400:#00BBF9; --sky-500:#00A0DA; --sky-600:#0084B4; --sky-700:#047195;
+  --sky-800:#06516B; --sky-900:#053342;
+
+  /* ── Navy ramp (extended from foundation) ── */
+  --navy-50:#EBF2FF; --navy-100:#D8DFF3; --navy-200:#B7C6E8; --navy-300:#8EA6D8;
+  --navy-400:#5C79B8; --navy-500:#3A5596; --navy-600:#2A3F74; --navy-700:#1A2A56;
+  --navy-800:#112040; --navy-900:#081B2D; --navy-950:#04101C;
+
+  /* ── Ochre / Crimson ramps ── */
+  --ochre-100:#F8ECD3; --ochre-300:#EFD293; --ochre-400:#E4B85C; --ochre-600:#A6791C; --ochre-800:#5C4514;
+  --crimson-100:#F9D2D9; --crimson-300:#E06A80; --crimson-500:#B01834; --crimson-700:#881127; --crimson-900:#3B0C15;
+
+  --glow:0 0 44px rgba(0,245,212,.30);
+  --hair:rgba(235,242,255,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--ink); color:var(--mist);
+  font-family:'Manrope',system-ui,sans-serif; font-weight:400;
+  -webkit-font-smoothing:antialiased; line-height:1.55;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 32px}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+
+/* ── Header ── */
+header{padding:80px 0 56px;border-bottom:1px solid var(--hair)}
+.brand{font-weight:800;letter-spacing:.18em;font-size:14px;color:var(--mist)}
+.brand span{color:var(--aqua-400)}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.04;font-weight:300;letter-spacing:-.02em;margin:26px 0 0}
+h1 b{font-weight:700}
+.lede{max-width:62ch;margin-top:20px;color:var(--navy-200);font-size:17px}
+.meta{margin-top:28px;display:flex;gap:22px;flex-wrap:wrap;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--navy-300)}
+
+/* ── Sections ── */
+section{padding:72px 0;border-bottom:1px solid var(--hair)}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--aqua-400);font-weight:600}
+h2{font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-.015em;margin:14px 0 10px}
+.sub{color:var(--navy-200);max-width:64ch;margin:0 0 36px;font-size:16px}
+
+/* ── Foundation swatches ── */
+.found{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+.found .dot{aspect-ratio:1;border-radius:50%;border:1px solid rgba(235,242,255,.24)}
+.found .nm{margin-top:14px;font-size:14px;font-weight:600}
+.found .hx{font-size:12px;color:var(--navy-300);margin-top:3px}
+.found .role{font-size:12px;color:var(--navy-300);margin-top:8px;line-height:1.4}
+
+/* ── Ramps ── */
+.ramp{display:grid;grid-template-columns:repeat(11,1fr);gap:4px;margin-bottom:10px}
+.ramp.short{grid-template-columns:repeat(5,1fr)}
+.step{padding:0 0 10px;}
+.step .chip{height:88px;border-radius:4px;display:flex;align-items:flex-end;padding:8px;border:1px solid rgba(235,242,255,.08)}
+.step .chip.core{height:112px;box-shadow:var(--glow)}
+.step .lbl{font-size:10.5px;color:var(--navy-300);margin-top:8px;letter-spacing:.04em}
+.step .hex{font-size:10.5px;color:var(--navy-200);display:block}
+.core-tag{font-size:9px;letter-spacing:.14em;color:var(--ink);font-weight:700}
+
+/* ── Rules ── */
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--hair);border:1px solid var(--hair)}
+.rule{background:var(--ink);padding:26px}
+.rule h3{margin:0 0 8px;font-size:16px;font-weight:600}
+.rule p{margin:0;font-size:14px;color:var(--navy-200)}
+.rule .no{color:var(--crimson-300)}
+.rule .yes{color:var(--aqua-400)}
+
+/* ── Buttons demo ── */
+.demo{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.panel{padding:38px;border-radius:6px;border:1px solid var(--hair)}
+.panel.dark{background:var(--navy-800)}
+.panel.light{background:var(--mist)}
+.panel .pl{font-size:11px;letter-spacing:.18em;text-transform:uppercase;margin-bottom:24px}
+.panel.dark .pl{color:var(--navy-300)}
+.panel.light .pl{color:var(--navy-500)}
+.btn{
+  font-family:inherit;font-size:15px;font-weight:700;letter-spacing:.01em;
+  padding:13px 26px;border-radius:4px;border:0;cursor:pointer;
+  background:var(--aqua-400);color:var(--ink);
+  transition:background .16s ease, box-shadow .16s ease, transform .06s ease;
+}
+.btn:hover{background:var(--aqua-300);box-shadow:var(--glow)}
+.btn:active{background:var(--aqua-500);transform:translateY(1px);box-shadow:none}
+.btn:focus-visible{outline:2px solid var(--sky-400);outline-offset:3px}
+.btn.ghost{background:transparent;color:var(--aqua-400);box-shadow:inset 0 0 0 1px var(--aqua-600)}
+.btn.ghost:hover{background:rgba(0,245,212,.10);box-shadow:inset 0 0 0 1px var(--aqua-400)}
+.panel.light .btn.ghost{color:var(--aqua-700);box-shadow:inset 0 0 0 1px var(--aqua-700)}
+.btn[disabled]{background:var(--navy-600);color:var(--navy-300);cursor:not-allowed;box-shadow:none}
+.panel.light .btn[disabled]{background:var(--navy-100);color:var(--navy-400)}
+.btnrow{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.statelist{margin-top:26px;font-size:12px;line-height:2}
+.panel.dark .statelist{color:var(--navy-300)}
+.panel.light .statelist{color:var(--navy-500)}
+.statelist b{font-weight:500}
+.panel.light .lnk{color:var(--sky-700);font-weight:600;text-decoration:none;border-bottom:1px solid var(--sky-300)}
+.panel.dark .lnk{color:var(--sky-300);font-weight:600;text-decoration:none;border-bottom:1px solid var(--sky-600)}
+
+/* ── Semantic ── */
+.sem{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.semcard{border:1px solid var(--hair);border-radius:6px;padding:22px;background:var(--navy-950)}
+.semcard .bar{height:6px;border-radius:3px;margin-bottom:18px}
+.semcard h3{margin:0 0 6px;font-size:15px;font-weight:600}
+.semcard p{margin:0;font-size:13px;color:var(--navy-300)}
+.semcard .pair{margin-top:14px;font-size:11px;color:var(--navy-200);line-height:1.9}
+
+/* ── Gradients ── */
+.grads{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grad{height:150px;border-radius:6px;border:1px solid var(--hair)}
+.g1{background:linear-gradient(135deg,var(--aqua-400) 0%,var(--sky-400) 100%)}
+.g2{background:linear-gradient(160deg,var(--navy-900) 0%,var(--navy-700) 60%,var(--navy-600) 100%)}
+.g3{background:linear-gradient(180deg,var(--navy-800) 0%,var(--navy-900) 100%);position:relative;overflow:hidden}
+.g3::after{content:"";position:absolute;inset:0 0 auto;height:2px;background:var(--aqua-400);box-shadow:var(--glow)}
+.gcap{font-size:12px;color:var(--navy-300);margin-top:10px}
+.gcap b{color:var(--mist);font-weight:600;display:block;font-size:13px}
+
+/* ── Contrast table ── */
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--navy-300);font-weight:600;padding:0 0 14px;border-bottom:1px solid var(--hair)}
+td{padding:13px 0;border-bottom:1px solid rgba(235,242,255,.07);color:var(--navy-100)}
+td .sw{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:9px;vertical-align:-1px}
+.pass{color:var(--aqua-400);font-weight:600}
+.fail{color:var(--crimson-300);font-weight:600}
+
+/* ── Chart order ── */
+.seq{display:flex;gap:8px;align-items:flex-end;height:120px}
+.seq div{flex:1;border-radius:3px 3px 0 0}
+
+/* ── Code ── */
+pre{background:var(--navy-950);border:1px solid var(--hair);border-radius:6px;padding:26px;overflow-x:auto;font-size:12.5px;line-height:1.85;color:var(--navy-200)}
+pre .c{color:var(--aqua-600)}
+pre .v{color:var(--sky-300)}
+
+footer{padding:52px 0 80px;color:var(--navy-400);font-size:12px;letter-spacing:.1em;text-transform:uppercase;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+@media (max-width:980px){
+  .found{grid-template-columns:repeat(3,1fr)}
+  .ramp{grid-template-columns:repeat(6,1fr)}
+  .demo,.rules,.grads{grid-template-columns:1fr}
+  .sem{grid-template-columns:1fr 1fr}
+}
+@media (max-width:560px){
+  .wrap{padding:0 20px}
+  .found{grid-template-columns:repeat(2,1fr)}
+  .ramp{grid-template-columns:repeat(4,1fr)}
+  .sem{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand mono">DEUTSCHTEC<span>.</span>AI</div>
+    <h1>Color Palette <b>02.1</b><br>Extended System</h1>
+    <p class="lede">The foundation palette stays exactly as approved. This document adds three things it was missing: a bright signal color for anything a person is meant to click, a full tint ramp for interface surfaces, and the rules that keep the bright color rare enough to still work.</p>
+    <div class="meta mono">
+      <span>Extends · Color Palette 02</span>
+      <span>Signal · #00F5D4</span>
+      <span>2026</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Unchanged</div>
+    <h2>Foundation</h2>
+    <p class="sub">Six colors carried over from the approved palette. Nothing here is re-specified — only the roles are written down, because roles are what the new colors have to fit around.</p>
+    <div class="found">
+      <div><div class="dot" style="background:#081B2D"></div><div class="nm">Ink</div><div class="hx mono">#081B2D</div><div class="role">Primary surface, body text on light</div></div>
+      <div><div class="dot" style="background:#1A2A56"></div><div class="nm">Navy</div><div class="hx mono">#1A2A56</div><div class="role">Cards, headers, secondary surface</div></div>
+      <div><div class="dot" style="background:#EBF2FF"></div><div class="nm">Mist</div><div class="hx mono">#EBF2FF</div><div class="role">Light surface, text on dark</div></div>
+      <div><div class="dot" style="background:#F5ECE1"></div><div class="nm">Sand</div><div class="hx mono">#F5ECE1</div><div class="role">Print, documents, warm sections</div></div>
+      <div><div class="dot" style="background:#E4B85C"></div><div class="nm">Ochre</div><div class="hx mono">#E4B85C</div><div class="role">Data, highlights — never a button</div></div>
+      <div><div class="dot" style="background:#881127"></div><div class="nm">Crimson</div><div class="hx mono">#881127</div><div class="role">Logo rule, critical states only</div></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">New · Action</div>
+    <h2>Signal Aqua</h2>
+    <p class="sub">The bright turquoise from the reference. It carries one job: this is where you click. Because it is the only color in the system with this energy, it stays readable as an instruction — the moment it decorates something, it stops meaning anything.</p>
+    <div class="ramp">
+      <div class="step"><div class="chip" style="background:#ECFEFC"></div><span class="lbl mono">50</span><span class="hex mono">#ECFEFC</span></div>
+      <div class="step"><div class="chip" style="background:#CCFFF8"></div><span class="lbl mono">100</span><span class="hex mono">#CCFFF8</span></div>
+      <div class="step"><div class="chip" style="background:#99FFF1"></div><span class="lbl mono">200</span><span class="hex mono">#99FFF1</span></div>
+      <div class="step"><div class="chip" style="background:#4DFCDE"></div><span class="lbl mono">300</span><span class="hex mono">#4DFCDE</span></div>
+      <div class="step"><div class="chip core" style="background:#00F5D4"><span class="core-tag mono">CORE</span></div><span class="lbl mono">400</span><span class="hex mono">#00F5D4</span></div>
+      <div class="step"><div class="chip" style="background:#00D6BA"></div><span class="lbl mono">500</span><span class="hex mono">#00D6BA</span></div>
+      <div class="step"><div class="chip" style="background:#00AD96"></div><span class="lbl mono">600</span><span class="hex mono">#00AD96</span></div>
+      <div class="step"><div class="chip" style="background:#027A6A"></div><span class="lbl mono">700</span><span class="hex mono">#027A6A</span></div>
+      <div class="step"><div class="chip" style="background:#06584D"></div><span class="lbl mono">800</span><span class="hex mono">#06584D</span></div>
+      <div class="step"><div class="chip" style="background:#063A33"></div><span class="lbl mono">900</span><span class="hex mono">#063A33</span></div>
+      <div class="step"><div class="chip" style="background:#04231F"></div><span class="lbl mono">950</span><span class="hex mono">#04231F</span></div>
+    </div>
+    <p class="sub" style="margin-top:26px">Which step to reach for: <b style="color:var(--aqua-400)">400</b> fills buttons and marks the active item. <b style="color:var(--aqua-300)">300</b> is hover on dark. <b style="color:var(--aqua-500)">500</b> is pressed. <b style="color:var(--aqua-600)">600</b> handles verified badges and small icons. <b style="color:var(--aqua-700)">700</b> is the only step allowed to be aqua text on a white or mist background. <b style="color:var(--aqua-300)">800–950</b> are tinted dark surfaces for panels that need to feel adjacent to the action.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">New · Support</div>
+    <h2>Sky</h2>
+    <p class="sub">The second blue from the reference. It absorbs everything aqua should not do — links, focus rings, informational states, chart series — so the bright color never has to share its meaning.</p>
+    <div class="ramp">
+      <div class="step"><div class="chip" style="background:#E5F6FF"></div><span class="lbl mono">50</span><span class="hex mono">#E5F6FF</span></div>
+      <div class="step"><div class="chip" style="background:#CCF2FF"></div><span class="lbl mono">100</span><span class="hex mono">#CCF2FF</span></div>
+      <div class="step"><div class="chip" style="background:#99E6FF"></div><span class="lbl mono">200</span><span class="hex mono">#99E6FF</span></div>
+      <div class="step"><div class="chip" style="background:#5CD6FF"></div><span class="lbl mono">300</span><span class="hex mono">#5CD6FF</span></div>
+      <div class="step"><div class="chip core" style="background:#00BBF9"><span class="core-tag mono">CORE</span></div><span class="lbl mono">400</span><span class="hex mono">#00BBF9</span></div>
+      <div class="step"><div class="chip" style="background:#00A0DA"></div><span class="lbl mono">500</span><span class="hex mono">#00A0DA</span></div>
+      <div class="step"><div class="chip" style="background:#0084B4"></div><span class="lbl mono">600</span><span class="hex mono">#0084B4</span></div>
+      <div class="step"><div class="chip" style="background:#047195"></div><span class="lbl mono">700</span><span class="hex mono">#047195</span></div>
+      <div class="step"><div class="chip" style="background:#06516B"></div><span class="lbl mono">800</span><span class="hex mono">#06516B</span></div>
+      <div class="step"><div class="chip" style="background:#053342"></div><span class="lbl mono">900</span><span class="hex mono">#053342</span></div>
+      <div class="step"><div class="chip" style="background:#04222C"></div><span class="lbl mono">950</span><span class="hex mono">#04222C</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">New · Structure</div>
+    <h2>Navy ramp</h2>
+    <p class="sub">The two approved navies sit at 700 and 900. The steps between and above them give the interface its borders, disabled states, dividers and muted text — the work that was previously being done with arbitrary opacity values.</p>
+    <div class="ramp">
+      <div class="step"><div class="chip" style="background:#EBF2FF"></div><span class="lbl mono">50</span><span class="hex mono">#EBF2FF</span></div>
+      <div class="step"><div class="chip" style="background:#D8DFF3"></div><span class="lbl mono">100</span><span class="hex mono">#D8DFF3</span></div>
+      <div class="step"><div class="chip" style="background:#B7C6E8"></div><span class="lbl mono">200</span><span class="hex mono">#B7C6E8</span></div>
+      <div class="step"><div class="chip" style="background:#8EA6D8"></div><span class="lbl mono">300</span><span class="hex mono">#8EA6D8</span></div>
+      <div class="step"><div class="chip" style="background:#5C79B8"></div><span class="lbl mono">400</span><span class="hex mono">#5C79B8</span></div>
+      <div class="step"><div class="chip" style="background:#3A5596"></div><span class="lbl mono">500</span><span class="hex mono">#3A5596</span></div>
+      <div class="step"><div class="chip" style="background:#2A3F74"></div><span class="lbl mono">600</span><span class="hex mono">#2A3F74</span></div>
+      <div class="step"><div class="chip core" style="background:#1A2A56"><span class="core-tag mono" style="color:#EBF2FF">NAVY</span></div><span class="lbl mono">700</span><span class="hex mono">#1A2A56</span></div>
+      <div class="step"><div class="chip" style="background:#112040"></div><span class="lbl mono">800</span><span class="hex mono">#112040</span></div>
+      <div class="step"><div class="chip core" style="background:#081B2D"><span class="core-tag mono" style="color:#EBF2FF">INK</span></div><span class="lbl mono">900</span><span class="hex mono">#081B2D</span></div>
+      <div class="step"><div class="chip" style="background:#04101C"></div><span class="lbl mono">950</span><span class="hex mono">#04101C</span></div>
+    </div>
+
+    <div style="height:44px"></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px" class="two">
+      <div>
+        <div class="eyebrow mono" style="color:var(--ochre-400)">Ochre ramp</div>
+        <div class="ramp short" style="margin-top:16px">
+          <div class="step"><div class="chip" style="background:#F8ECD3"></div><span class="lbl mono">100</span><span class="hex mono">#F8ECD3</span></div>
+          <div class="step"><div class="chip" style="background:#EFD293"></div><span class="lbl mono">300</span><span class="hex mono">#EFD293</span></div>
+          <div class="step"><div class="chip" style="background:#E4B85C"></div><span class="lbl mono">400</span><span class="hex mono">#E4B85C</span></div>
+          <div class="step"><div class="chip" style="background:#A6791C"></div><span class="lbl mono">600</span><span class="hex mono">#A6791C</span></div>
+          <div class="step"><div class="chip" style="background:#5C4514"></div><span class="lbl mono">800</span><span class="hex mono">#5C4514</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="eyebrow mono" style="color:var(--crimson-300)">Crimson ramp</div>
+        <div class="ramp short" style="margin-top:16px">
+          <div class="step"><div class="chip" style="background:#F9D2D9"></div><span class="lbl mono">100</span><span class="hex mono">#F9D2D9</span></div>
+          <div class="step"><div class="chip" style="background:#E06A80"></div><span class="lbl mono">300</span><span class="hex mono">#E06A80</span></div>
+          <div class="step"><div class="chip" style="background:#B01834"></div><span class="lbl mono">500</span><span class="hex mono">#B01834</span></div>
+          <div class="step"><div class="chip" style="background:#881127"></div><span class="lbl mono">700</span><span class="hex mono">#881127</span></div>
+          <div class="step"><div class="chip" style="background:#3B0C15"></div><span class="lbl mono">900</span><span class="hex mono">#3B0C15</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Live</div>
+    <h2>Action states</h2>
+    <p class="sub">The same button on both surfaces. Hover, press and focus each of them — every state below is produced by a token from this document, nothing is improvised.</p>
+    <div class="demo">
+      <div class="panel dark">
+        <div class="pl mono">On ink / navy</div>
+        <div class="btnrow">
+          <button class="btn">Start comparing</button>
+          <button class="btn ghost">See models</button>
+          <button class="btn" disabled>Unavailable</button>
+        </div>
+        <div class="statelist mono">
+          <b>Rest</b> aqua-400 fill, ink label<br>
+          <b>Hover</b> aqua-300 + glow 44px / 30%<br>
+          <b>Press</b> aqua-500, 1px down, no glow<br>
+          <b>Focus</b> 2px sky-400 ring, 3px offset<br>
+          <b>Disabled</b> navy-600 fill, navy-300 label
+        </div>
+        <div style="margin-top:22px;font-size:14px">Inline link on dark: <a class="lnk" href="#">read the model list</a></div>
+      </div>
+      <div class="panel light">
+        <div class="pl mono">On mist / white</div>
+        <div class="btnrow">
+          <button class="btn">Start comparing</button>
+          <button class="btn ghost">See models</button>
+          <button class="btn" disabled>Unavailable</button>
+        </div>
+        <div class="statelist mono">
+          <b>Rest</b> aqua-400 fill, ink label — 12.5:1<br>
+          <b>Hover</b> aqua-300 + glow<br>
+          <b>Press</b> aqua-500<br>
+          <b>Focus</b> 2px sky-400 ring<br>
+          <b>Disabled</b> navy-100 fill, navy-400 label
+        </div>
+        <div style="margin-top:22px;font-size:14px;color:#081B2D">Inline link on light: <a class="lnk" href="#">read the model list</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Discipline</div>
+    <h2>Six rules</h2>
+    <p class="sub">A bright color only stays bright if it is scarce. These are the constraints that keep it working across the site, the product and the deck.</p>
+    <div class="rules">
+      <div class="rule"><h3>One aqua per view</h3><p>A single aqua-400 element per screen — the primary action. If a second one appears, one of them is not primary and should be a ghost button.</p></div>
+      <div class="rule"><h3>Aqua is never body text</h3><p><span class="no">#00F5D4 on white is 1.4:1.</span> As text it only exists on ink or navy. On light surfaces, aqua text means <span class="yes">aqua-700</span> and nothing else.</p></div>
+      <div class="rule"><h3>Aqua fills carry ink labels</h3><p>Always <span class="yes">#081B2D</span> on an aqua fill — never white, never navy-700. This pairing is fixed across both surfaces so the button reads identically everywhere.</p></div>
+      <div class="rule"><h3>Bright means clickable, muted means status</h3><p>aqua-400 is reserved for interaction. Verified, signed and passing states use aqua-600, which is calmer and cannot be mistaken for a button.</p></div>
+      <div class="rule"><h3>Crimson is not a second action</h3><p>It stays the mark's rule and the critical state. A red button beside an aqua button splits attention and both lose.</p></div>
+      <div class="rule"><h3>Ochre stays in data</h3><p>Charts, percentages, editorial highlights, print. It has warmth the interface needs, but it has never been an action color and does not become one here.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Mapping</div>
+    <h2>Status colors</h2>
+    <p class="sub">Four states, each drawn from a ramp already in the system. The light column is what you use on mist; the dark column is what you use on ink.</p>
+    <div class="sem">
+      <div class="semcard">
+        <div class="bar" style="background:#00AD96"></div>
+        <h3>Verified</h3>
+        <p>Signed output, passed check, completed run.</p>
+        <div class="pair mono">on light · #027A6A<br>on dark · #00AD96<br>tint · #ECFEFC</div>
+      </div>
+      <div class="semcard">
+        <div class="bar" style="background:#00BBF9"></div>
+        <h3>Information</h3>
+        <p>Notices, tips, model metadata, neutral system messages.</p>
+        <div class="pair mono">on light · #047195<br>on dark · #5CD6FF<br>tint · #E5F6FF</div>
+      </div>
+      <div class="semcard">
+        <div class="bar" style="background:#E4B85C"></div>
+        <h3>Attention</h3>
+        <p>Pending, rate-limited, needs review, quota nearly spent.</p>
+        <div class="pair mono">on light · #A6791C<br>on dark · #E4B85C<br>tint · #F8ECD3</div>
+      </div>
+      <div class="semcard">
+        <div class="bar" style="background:#B01834"></div>
+        <h3>Critical</h3>
+        <p>Failed generation, rejected upload, expired credential.</p>
+        <div class="pair mono">on light · #B01834<br>on dark · #E06A80<br>tint · #F9D2D9</div>
+      </div>
+    </div>
+
+    <div style="height:56px"></div>
+    <div class="eyebrow mono">Charts</div>
+    <h2 style="font-size:22px">Series order</h2>
+    <p class="sub">Fixed sequence, so the same metric keeps the same color across the product, the deck and the reports.</p>
+    <div class="seq">
+      <div style="background:#00BBF9;height:100%"></div>
+      <div style="background:#00F5D4;height:78%"></div>
+      <div style="background:#E4B85C;height:62%"></div>
+      <div style="background:#8EA6D8;height:48%"></div>
+      <div style="background:#B01834;height:34%"></div>
+      <div style="background:#047195;height:22%"></div>
+    </div>
+    <div class="gcap mono" style="margin-top:12px">sky-400 · aqua-400 · ochre-400 · navy-300 · crimson-500 · sky-700</div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Surfaces</div>
+    <h2>Gradients and the edge</h2>
+    <p class="sub">Three treatments, and no others. The system has one gradient with color in it — used sparingly, on hero moments and nothing else.</p>
+    <div class="grads">
+      <div>
+        <div class="grad g1"></div>
+        <div class="gcap"><b>Signal</b>135° · #00F5D4 → #00BBF9. Hero art, seals, key illustration. Never behind text.</div>
+      </div>
+      <div>
+        <div class="grad g2"></div>
+        <div class="gcap"><b>Deep</b>160° · ink → navy-700 → navy-600. Section backgrounds, deck slides, video plates.</div>
+      </div>
+      <div>
+        <div class="grad g3"></div>
+        <div class="gcap"><b>Edge</b>Navy panel with a 2px aqua top rule and glow. The cheapest way to make a card feel active.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Verified</div>
+    <h2>Contrast</h2>
+    <p class="sub">Measured, not estimated. AA needs 4.5:1 for body text and 3:1 for large text and interface elements.</p>
+    <table>
+      <thead><tr><th>Foreground</th><th>Background</th><th>Ratio</th><th>Use</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sw" style="background:#081B2D"></span>Ink #081B2D</td><td>Aqua-400 #00F5D4</td><td class="pass">12.5 : 1</td><td>Primary button label</td></tr>
+        <tr><td><span class="sw" style="background:#00F5D4"></span>Aqua-400 #00F5D4</td><td>Ink #081B2D</td><td class="pass">12.5 : 1</td><td>Aqua text and icons on dark</td></tr>
+        <tr><td><span class="sw" style="background:#00F5D4"></span>Aqua-400 #00F5D4</td><td>Navy-700 #1A2A56</td><td class="pass">9.9 : 1</td><td>Aqua on cards</td></tr>
+        <tr><td><span class="sw" style="background:#00F5D4"></span>Aqua-400 #00F5D4</td><td>White / Mist</td><td class="fail">1.4 : 1</td><td>Fill only — never text</td></tr>
+        <tr><td><span class="sw" style="background:#027A6A"></span>Aqua-700 #027A6A</td><td>White</td><td class="pass">5.3 : 1</td><td>Aqua text on light</td></tr>
+        <tr><td><span class="sw" style="background:#047195"></span>Sky-700 #047195</td><td>White</td><td class="pass">5.5 : 1</td><td>Links on light</td></tr>
+        <tr><td><span class="sw" style="background:#00BBF9"></span>Sky-400 #00BBF9</td><td>Ink #081B2D</td><td class="pass">7.9 : 1</td><td>Links and focus ring on dark</td></tr>
+        <tr><td><span class="sw" style="background:#EBF2FF"></span>Mist #EBF2FF</td><td>Ink #081B2D</td><td class="pass">15.5 : 1</td><td>Body text on dark</td></tr>
+        <tr><td><span class="sw" style="background:#8EA6D8"></span>Navy-300 #8EA6D8</td><td>Ink #081B2D</td><td class="pass">7.1 : 1</td><td>Muted text on dark</td></tr>
+        <tr><td><span class="sw" style="background:#E4B85C"></span>Ochre #E4B85C</td><td>Ink #081B2D</td><td class="pass">9.4 : 1</td><td>Data labels on dark</td></tr>
+        <tr><td><span class="sw" style="background:#881127"></span>Crimson #881127</td><td>White</td><td class="pass">9.7 : 1</td><td>Critical text on light</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow mono">Handoff</div>
+    <h2>Tokens</h2>
+    <p class="sub">Drop into the site, the app and the deck templates. Semantic aliases sit on top of the ramps so a role can be re-pointed without touching the raw values.</p>
+<pre class="mono"><span class="c">:root</span> {
+  <span class="c">/* foundation */</span>
+  --ink:<span class="v">#081B2D</span>;   --navy:<span class="v">#1A2A56</span>;  --mist:<span class="v">#EBF2FF</span>;
+  --sand:<span class="v">#F5ECE1</span>;  --ochre:<span class="v">#E4B85C</span>; --crimson:<span class="v">#881127</span>;
+
+  <span class="c">/* signal aqua */</span>
+  --aqua-50:<span class="v">#ECFEFC</span>;  --aqua-100:<span class="v">#CCFFF8</span>; --aqua-200:<span class="v">#99FFF1</span>;
+  --aqua-300:<span class="v">#4DFCDE</span>; --aqua-400:<span class="v">#00F5D4</span>; --aqua-500:<span class="v">#00D6BA</span>;
+  --aqua-600:<span class="v">#00AD96</span>; --aqua-700:<span class="v">#027A6A</span>; --aqua-800:<span class="v">#06584D</span>;
+  --aqua-900:<span class="v">#063A33</span>; --aqua-950:<span class="v">#04231F</span>;
+
+  <span class="c">/* sky */</span>
+  --sky-50:<span class="v">#E5F6FF</span>;  --sky-100:<span class="v">#CCF2FF</span>; --sky-200:<span class="v">#99E6FF</span>;
+  --sky-300:<span class="v">#5CD6FF</span>; --sky-400:<span class="v">#00BBF9</span>; --sky-500:<span class="v">#00A0DA</span>;
+  --sky-600:<span class="v">#0084B4</span>; --sky-700:<span class="v">#047195</span>; --sky-800:<span class="v">#06516B</span>;
+  --sky-900:<span class="v">#053342</span>; --sky-950:<span class="v">#04222C</span>;
+
+  <span class="c">/* navy */</span>
+  --navy-50:<span class="v">#EBF2FF</span>;  --navy-100:<span class="v">#D8DFF3</span>; --navy-200:<span class="v">#B7C6E8</span>;
+  --navy-300:<span class="v">#8EA6D8</span>; --navy-400:<span class="v">#5C79B8</span>; --navy-500:<span class="v">#3A5596</span>;
+  --navy-600:<span class="v">#2A3F74</span>; --navy-700:<span class="v">#1A2A56</span>; --navy-800:<span class="v">#112040</span>;
+  --navy-900:<span class="v">#081B2D</span>; --navy-950:<span class="v">#04101C</span>;
+
+  <span class="c">/* ochre + crimson */</span>
+  --ochre-100:<span class="v">#F8ECD3</span>; --ochre-300:<span class="v">#EFD293</span>; --ochre-400:<span class="v">#E4B85C</span>;
+  --ochre-600:<span class="v">#A6791C</span>; --ochre-800:<span class="v">#5C4514</span>;
+  --crimson-100:<span class="v">#F9D2D9</span>; --crimson-300:<span class="v">#E06A80</span>;
+  --crimson-500:<span class="v">#B01834</span>; --crimson-700:<span class="v">#881127</span>; --crimson-900:<span class="v">#3B0C15</span>;
+
+  <span class="c">/* roles */</span>
+  --action:            var(--aqua-400);
+  --action-hover:      var(--aqua-300);
+  --action-press:      var(--aqua-500);
+  --action-label:      var(--ink);
+  --action-text-light: var(--aqua-700);
+  --focus-ring:        var(--sky-400);
+  --link-on-light:     var(--sky-700);
+  --link-on-dark:      var(--sky-300);
+  --surface:           var(--ink);
+  --surface-raised:    var(--navy-800);
+  --border-on-dark:    rgba(235,242,255,.14);
+  --text-muted-dark:   var(--navy-300);
+  --state-verified:    var(--aqua-600);
+  --state-info:        var(--sky-400);
+  --state-attention:   var(--ochre-400);
+  --state-critical:    var(--crimson-500);
+  --glow-action:       0 0 44px rgba(0,245,212,.30);
+}</pre>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex;justify-content:space-between;width:100%;flex-wrap:wrap;gap:12px">
+    <span class="mono">Deutschtec.ai — Color Palette 02.1</span>
+    <span class="mono">Extends Color Palette 02 · 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
